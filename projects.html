@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Akshansh Sinha | Website Developer</title>
+  <meta name="description" content="Explore custom web projects by Akshansh Sinha — best website developer. React, Kotlin, WebSockets, and AI integrations.">
+  <meta name="keywords" content="best website dev, best website developer, Akshansh Sinha, Vortex Apps, Zephyr Devs">
+  <meta name="author" content="Akshansh Sinha">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="preloader" id="preloader">
+    <div class="loader-content">
+      <img src="assets/logo.png" alt="Akshansh" class="loader-logo">
+      <div class="loader-text">AKSHANSH SINHA</div>
+    </div>
+  </div>
+
+  <canvas id="canvas-particles"></canvas>
+  <div class="cursor-spotlight" id="cursor-spotlight"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+  <div class="page-transition-overlay" id="page-transition-overlay"></div>
+
+  <div class="header-wrapper">
+    <header class="header-container">
+      <a href="index.html" class="nav-brand">
+        <img src="assets/logo.png" alt="Akshansh" class="nav-brand-img">
+        AKSHANSH<span>.dev</span>
+      </a>
+      <div class="nav-right-container">
+        <nav>
+          <ul class="nav-links" id="nav-links">
+            <li class="nav-link"><a href="index.html">Home</a></li>
+            <li class="nav-link"><a href="about.html">About</a></li>
+            <li class="nav-link active"><a href="projects.html">Projects</a></li>
+            <li class="nav-link"><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle-btn" id="theme-toggle-btn">&#9788;</button>
+        <button class="nav-toggle" id="nav-toggle">&#9776;</button>
+      </div>
+    </header>
+  </div>
+
+  <main class="container">
+
+    <div class="page-intro reveal">
+      <span class="page-label">Selected Portfolio</span>
+      <h1 class="page-title">Production Deployments</h1>
+      <p class="page-desc">Web systems and client projects designed and deployed by the best website developer.</p>
+    </div>
+
+    <div class="filter-tabs reveal" id="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All Systems</button>
+      <button class="filter-tab" data-filter="zephyr">Zephyr Devs</button>
+      <button class="filter-tab" data-filter="beatlabs">Vortex Apps</button>
+    </div>
+
+    <div class="projects-grid reveal" id="projects-grid">
+
+      <!-- BeatWave -->
+      <div class="project-card" data-agency="beatlabs" id="proj-beatwave">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <img src="assets/beatwavepng.png" alt="BeatWave" class="project-mini-logo">
+            <span class="agency-badge beatlabs">Vortex Apps</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">BeatWave</h3>
+        <p class="project-desc">High-fidelity, open-source music streaming application for seamless background playback with zero ads.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">React</span>
+            <span class="project-tech-item">NodeJS</span>
+            <span class="project-tech-item">Tailwind</span>
+          </div>
+          <a href="https://beatwave.oneapp.dev" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+          <div class="beatwave-download-container">
+            <div class="beatwave-download-btn-group">
+              <a href="https://github.com/beatlabs790/BeatWave/releases/download/v4.0/BeatWave-release-v4.apk" download class="btn-download-action">&#9094; Get APK</a>
+            </div>
+            <div class="live-download-ticker large-counter">
+              <span class="live-download-pulse"></span>
+              <span class="live-download-val">2,100+</span> downloads
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WaveMirror -->
+      <div class="project-card" data-agency="beatlabs" id="proj-wavemirror">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <img src="assets/wavemirror.png" alt="WaveMirror" class="project-mini-logo">
+            <span class="agency-badge beatlabs">Vortex Apps</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">WaveMirror</h3>
+        <p class="project-desc">Lightweight movies application with fast search queries and dynamic media showcase layouts.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">HTML5</span>
+            <span class="project-tech-item">CSS</span>
+            <span class="project-tech-item">JS</span>
+          </div>
+          <a href="https://wavemirrors.netlify.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+      <!-- Onyx Chat -->
+      <div class="project-card" data-agency="beatlabs" id="proj-onyx">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <img src="assets/onyx logo.png" alt="Onyx Chat" class="project-mini-logo">
+            <span class="agency-badge beatlabs">Vortex Apps</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">Onyx Chat</h3>
+        <p class="project-desc">Secure real-time messaging server with low-latency WebSocket handshakes and clean user interfaces.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">Full-Stack</span>
+            <span class="project-tech-item">WebSockets</span>
+            <span class="project-tech-item">JS</span>
+          </div>
+          <a href="https://onyxchat.netlify.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+      <!-- Rajdarbar -->
+      <div class="project-card" data-agency="zephyr" id="proj-rajdarbar">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <span class="agency-badge zephyr">Zephyr Devs</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">Rajdarbar Banquet Hall</h3>
+        <p class="project-desc">Luxury banquet venue showcase and online booking system, increasing direct sales bookings substantially.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">HTML5 &amp; CSS</span>
+            <span class="project-tech-item">SEO</span>
+          </div>
+          <a href="https://rajdarbars.vercel.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+      <!-- Haveli Restaurant -->
+      <div class="project-card" data-agency="zephyr" id="proj-haveli">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <span class="agency-badge zephyr">Zephyr Devs</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">Haveli Restaurant</h3>
+        <p class="project-desc">Light menu structure and table reservation interface optimised for mobile browser runtimes under 0.6s.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">Mobile Web</span>
+            <span class="project-tech-item">JS</span>
+          </div>
+          <a href="https://havelirestaurants.netlify.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+      <!-- RKM Square -->
+      <div class="project-card" data-agency="zephyr" id="proj-rkm">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <span class="agency-badge zephyr">Zephyr Devs</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">RKM Square</h3>
+        <p class="project-desc">Commercial real estate leasing system with available space matrices and automated client inquiries routing.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">Firebase</span>
+            <span class="project-tech-item">Property Tech</span>
+          </div>
+          <a href="https://rkmsquare.vercel.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+      <!-- Panna Events -->
+      <div class="project-card" data-agency="zephyr" id="proj-panna">
+        <div class="project-card-header">
+          <div class="badge-row">
+            <span class="agency-badge zephyr">Zephyr Devs</span>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+        <h3 class="project-title">Panna Events</h3>
+        <p class="project-desc">Local event planning and decor booking hub optimised for keyword indexing and visual portfolio layouts.</p>
+        <div class="project-card-footer">
+          <div class="project-tech-list">
+            <span class="project-tech-item">SEO</span>
+            <span class="project-tech-item">Patna</span>
+          </div>
+          <a href="https://pannaevents.vercel.app" target="_blank" rel="noopener" class="project-btn-link">Launch site &#8599;</a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="chat-bubble-wrapper">
+    <button class="chat-bubble-trigger" id="chat-bubble-trigger">
+      <div class="chat-bubble-pulse"></div>
+      <span class="chat-bubble-icon">&#128172;</span>
+    </button>
+    <div class="chat-box-container" id="chat-box-container">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <img src="assets/logo.png" alt="Akshansh" class="chat-header-avatar">
+          <span class="chat-header-title">Ask Me Anything</span>
+        </div>
+        <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="chat-msg-typing" id="chat-msg-typing">
+          <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+        </div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+        <button class="chat-send-btn" id="chat-send-btn">&#10148;</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">AKSHANSH<span>.dev</span></div>
+      <div>
+        <a href="privacy.html" style="margin-right:15px;text-decoration:underline;">Privacy Policy</a>
+        <a href="terms.html" style="text-decoration:underline;">Terms &amp; Conditions</a>
+      </div>
+      <div>&copy; 2026 Akshansh Sinha. Patna, India.</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
