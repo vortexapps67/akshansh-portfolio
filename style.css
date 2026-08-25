@@ -1,6 +1,6 @@
-/* =============================================
-   AKSHANSH SINHA — DARK NEO-BRUTALIST PORTFOLIO
-   Full Redesign — style.css
+ï»¿/* =============================================
+   AKSHANSH SINHA ï¿½ DARK NEO-BRUTALIST PORTFOLIO
+   Full Redesign ï¿½ style.css
    ============================================= */
 
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap");
@@ -45,7 +45,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .preloader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity 0.4s ease,visibility 0.4s ease}
 .preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .loader-content{text-align:center;background:var(--bg);border:3px solid var(--border);padding:40px;box-shadow:6px 6px 0px var(--accent)}
-.loader-logo{width:64px;height:64px;object-fit:contain;margin:0 auto 20px;filter:grayscale(1) invert(1)}
+.loader-logo{width:64px;height:64px;object-fit:contain;margin:0 auto 20px;}
 .loader-text{font-family:var(--font-head);font-size:1rem;font-weight:700;letter-spacing:2px;color:var(--text);text-transform:uppercase}
 
 /* Page Transition */
@@ -91,7 +91,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 
 .hero-right{display:flex;align-items:center;justify-content:center}
 .hero-visual-frame{width:260px;height:260px;background:var(--bg-card);border:3px solid var(--border);box-shadow:8px 8px 0px var(--accent);display:flex;align-items:center;justify-content:center;position:relative}
-.hero-visual-frame img{width:180px;height:180px;object-fit:contain;filter:grayscale(1) contrast(1.1)}
+.hero-visual-frame img{width:180px;height:180px;object-fit:contain;}
 .hero-stats{display:flex;gap:36px;margin-top:48px;flex-wrap:wrap;border-top:2px solid var(--border-muted);padding-top:24px}
 .hero-stat-num{font-family:var(--font-head);font-size:2.2rem;font-weight:700;color:var(--text);display:block}
 .hero-stat-lbl{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:600}
