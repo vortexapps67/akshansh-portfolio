@@ -935,9 +935,9 @@ function initBeatwaveTicker() {
   const tickers = document.querySelectorAll('.live-download-val');
   if (tickers.length === 0) return;
 
-  // Set static 2,100+ counter
+  // Set static 2,600+ counter
   tickers.forEach(t => {
-    t.textContent = '2,100+';
+    t.textContent = '2,600+';
   });
 
   // Listen to clicks on download buttons to send a log event to Discord Webhook
