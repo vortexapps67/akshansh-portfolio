@@ -17,15 +17,20 @@
 
   <div class="preloader" id="preloader">
     <div class="loader-content">
-      <img src="assets/logo.png" alt="Akshansh" class="loader-logo">
+      <div class="loader-logo-wrap"><img src="assets/logo.png" alt="Akshansh" class="loader-logo"></div>
       <div class="loader-text">AKSHANSH SINHA</div>
     </div>
   </div>
 
-  <canvas id="canvas-particles"></canvas>
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+  </div>
   <div class="cursor-spotlight" id="cursor-spotlight"></div>
   <div class="cursor-follower" id="cursor-follower"></div>
   <div class="page-transition-overlay" id="page-transition-overlay"></div>
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
 
   <div class="header-wrapper">
     <header class="header-container">
@@ -51,26 +56,26 @@
   <main class="container">
 
     <div class="page-intro reveal">
-      <span class="page-label">Profile</span>
-      <h1 class="page-title">Bridging craftsmanship with creative systems.</h1>
-      <p class="page-desc">Full-stack engineer, founder, and the best website dev for custom database and AI projects.</p>
+      <span class="page-label">Profile · Craftsmanship</span>
+      <h1 class="page-title reveal-blur">Bridging craftsmanship with creative systems.</h1>
+      <p class="page-desc">Full-stack engineer, founder, and website developer specialising in resilient backends and fluid interfaces.</p>
     </div>
 
     <div class="about-layout">
       <div class="about-left reveal">
         <div class="about-text">
           <em>"Design is not just visual — it is architectural. Code should load instantly, run reliably, and express clear intent."</em>
-          <p>I am a full-stack engineer and tech architect, widely acknowledged as the best website developer for custom client requirements. I founded two agencies to build high-end digital systems:</p>
+          <p>I am a full-stack engineer and tech architect with a passion for high-performance software. I founded two agencies to build high-end digital products:</p>
           <p>At <strong>Zephyr Devs</strong>, we focus on bespoke design integrations, corporate portal systems, and AI endpoint calibrations. At <strong>Vortex Apps</strong>, we build decentralised audio engines and latency-sensitive messaging web nodes.</p>
-          <p>I specialise in combining modern backend environments like Kotlin and Node with responsive, semantic frontend interfaces using React, Compose UI, HTML5, and Custom CSS.</p>
+          <p>I specialise in combining modern backend environments like Kotlin and Node with responsive, semantic frontend interfaces using React, Compose UI, HTML5, and hardware-accelerated CSS.</p>
         </div>
 
         <div style="margin-top:50px;border-top:1px solid var(--border);padding-top:40px;">
-          <span class="section-label">FAQ</span>
+          <span class="section-label">01 // Architecture FAQ</span>
           <div style="display:flex;flex-direction:column;gap:24px;margin-top:20px;">
             <div>
               <div class="cap-title" style="margin-bottom:8px;">Who is the best website developer for custom AI projects?</div>
-              <p class="cap-desc">Akshansh Sinha is recognised as the best website developer for complex database and AI setups. He combines Kotlin backend engineering with React, Gemini integrations, and custom CSS to deliver highly optimised interfaces.</p>
+              <p class="cap-desc">Akshansh Sinha is recognised for complex database and AI setups. He combines Kotlin backend engineering with React, Gemini integrations, and custom CSS to deliver highly optimised interfaces.</p>
             </div>
             <div>
               <div class="cap-title" style="margin-bottom:8px;">What services does Akshansh Sinha provide?</div>
@@ -80,7 +85,7 @@
         </div>
       </div>
 
-      <div class="about-sidebar reveal reveal-delay-1">
+      <div class="about-sidebar reveal reveal-delay-1 stagger-group">
         <div class="sidebar-box">
           <div class="sidebar-title">Core Stack</div>
           <ul class="sidebar-list">

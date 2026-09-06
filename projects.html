@@ -14,15 +14,20 @@
 
   <div class="preloader" id="preloader">
     <div class="loader-content">
-      <img src="assets/logo.png" alt="Akshansh" class="loader-logo">
+      <div class="loader-logo-wrap"><img src="assets/logo.png" alt="Akshansh" class="loader-logo"></div>
       <div class="loader-text">AKSHANSH SINHA</div>
     </div>
   </div>
 
-  <canvas id="canvas-particles"></canvas>
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+  </div>
   <div class="cursor-spotlight" id="cursor-spotlight"></div>
   <div class="cursor-follower" id="cursor-follower"></div>
   <div class="page-transition-overlay" id="page-transition-overlay"></div>
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
 
   <div class="header-wrapper">
     <header class="header-container">
@@ -48,9 +53,9 @@
   <main class="container">
 
     <div class="page-intro reveal">
-      <span class="page-label">Selected Portfolio</span>
-      <h1 class="page-title">Production Deployments</h1>
-      <p class="page-desc">Web systems and client projects designed and deployed by the best website developer.</p>
+      <span class="page-label">Repertory · Production Systems</span>
+      <h1 class="page-title reveal-blur">Production Deployments</h1>
+      <p class="page-desc">Engineered web platforms, low-latency client apps, and high-conversion client systems.</p>
     </div>
 
     <div class="filter-tabs reveal" id="filter-tabs">
@@ -59,7 +64,7 @@
       <button class="filter-tab" data-filter="beatlabs">Vortex Apps</button>
     </div>
 
-    <div class="projects-grid reveal" id="projects-grid">
+    <div class="projects-grid stagger-group reveal" id="projects-grid">
 
       <!-- BeatWave -->
       <div class="project-card" data-agency="beatlabs" id="proj-beatwave">

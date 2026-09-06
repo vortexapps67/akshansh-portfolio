@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCursorSpotlight();
   initMouseFollower();
   initScrollReveals();
+  initCardSpotlight();
   initProjectsFilter();
   initMobileMenu();
   initWebhookContact();
@@ -13,9 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvasParticles();
   initPageTransitions();
   initMagneticHover();
-  fetchGitHubStats();
   initProjectPreviews();
   initBeatwaveTicker();
+  initScrollProgress();
+  initStatCounters();
 });
 
 /* Cursor Spotlight Glow */
@@ -23,8 +25,7 @@ function initCursorSpotlight() {
   const spotlight = document.getElementById('cursor-spotlight');
   if (!spotlight) return;
   window.addEventListener('mousemove', (e) => {
-    spotlight.style.left = e.clientX + 'px';
-    spotlight.style.top = e.clientY + 'px';
+    spotlight.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
   });
 }
 
@@ -156,11 +157,17 @@ function initMouseFollower() {
 }
 
 /* ==========================================================================
-   4. Scroll Reveal Observer
+   4. Scroll Reveal Observer & Stagger Engine
    ========================================================================== */
 function initScrollReveals() {
-  const reveals = document.querySelectorAll('.reveal');
+  const reveals = document.querySelectorAll('.reveal, .reveal-up, .reveal-blur, .reveal-scale, .reveal-left, .stagger-group');
   if (reveals.length === 0) return;
+
+  // Stagger children of grid containers automatically
+  const gridContainers = document.querySelectorAll('.agencies-grid, .caps-grid, .stats-grid, .featured-grid, .projects-grid, .contact-details');
+  gridContainers.forEach(grid => {
+    grid.classList.add('stagger-group');
+  });
 
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
@@ -170,12 +177,44 @@ function initScrollReveals() {
       }
     });
   }, {
-    threshold: 0.05,
+    threshold: 0.06,
     rootMargin: '0px 0px -40px 0px'
   });
 
   reveals.forEach(elem => {
     observer.observe(elem);
+  });
+
+  // Check elements already visible on load (above the fold)
+  function checkViewportVisibility() {
+    reveals.forEach(elem => {
+      const rect = elem.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.94) {
+        elem.classList.add('visible');
+        observer.unobserve(elem);
+      }
+    });
+  }
+
+  checkViewportVisibility();
+  window.addEventListener('load', checkViewportVisibility);
+}
+
+/* ==========================================================================
+   Card Cursor Spotlight Physics
+   ========================================================================== */
+function initCardSpotlight() {
+  const cards = document.querySelectorAll('.agency-card, .cap-card, .stat-card, .project-card, .contact-card-item');
+  if (cards.length === 0) return;
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
   });
 }
 
@@ -707,57 +746,7 @@ function initMagneticHover() {
   });
 }
 
-/* ==========================================================================
-   12. Dynamic GitHub API Integration (beatlabs790)
-   ========================================================================== */
-async function fetchGitHubStats() {
-  const statsNumberBlocks = document.querySelectorAll('.stats-section .sidebar-box');
-  if (statsNumberBlocks.length < 3) return;
-
-  // Third block on expanded home page represents "30+ Production Deploys"
-  // We can convert this or add a new statistics log for GitHub active repos
-  const repoStatBlockValue = statsNumberBlocks[2].querySelector('div:first-child');
-  const repoStatBlockLabel = statsNumberBlocks[2].querySelector('div:last-child');
-  
-  if (!repoStatBlockValue) return;
-
-  try {
-    const res = await fetch('https://api.github.com/users/beatlabs790');
-    if (!res.ok) throw new Error('GitHub API rate limit or error');
-    
-    const data = await res.json();
-    const publicRepos = data.public_repos || 24;
-
-    // Smoothly animate count replacement
-    animateCount(repoStatBlockValue, parseInt(repoStatBlockValue.textContent) || 0, publicRepos, "+ Active Repos");
-    if (repoStatBlockLabel) {
-      repoStatBlockLabel.textContent = "GitHub Public Repos";
-    }
-  } catch (err) {
-    console.warn('Fallback github data applied:', err);
-    // Silent fallback to standard offline project credentials
-  }
-
-  function animateCount(elem, start, end, suffix) {
-    let current = start;
-    const duration = 800;
-    const steps = 20;
-    const stepTime = duration / steps;
-    const increment = (end - start) / steps;
-    let stepCount = 0;
-
-    const interval = setInterval(() => {
-      current += increment;
-      elem.textContent = Math.round(current) + suffix;
-      stepCount++;
-      
-      if (stepCount >= steps) {
-        clearInterval(interval);
-        elem.textContent = end + suffix;
-      }
-    }, stepTime);
-  }
-}
+// GitHub live-stat fetching removed in the Aurora Glass rebuild — stats are static copy now.
 
 /* ==========================================================================
    13. Project Spec Mockup Modals
@@ -771,26 +760,19 @@ function initProjectPreviews() {
     <div class="preview-modal-content">
       <div class="preview-modal-header">
         <h3 id="modal-project-title">Project Name</h3>
-        <button class="preview-modal-close" id="modal-close-btn">&times;</button>
+        <button class="preview-modal-close" id="modal-close-btn" aria-label="Close preview">&times;</button>
       </div>
       <div class="preview-modal-body">
-        
-        <!-- Mock Browser Frame -->
-        <div class="mock-browser">
-          <div class="mock-browser-header">
-            <div class="mock-browser-dots">
-              <span class="mock-browser-dot red"></span>
-              <span class="mock-browser-dot yellow"></span>
-              <span class="mock-browser-dot green"></span>
-            </div>
-            <div class="mock-browser-address" id="modal-browser-url">https://beatwave.oneapp.dev</div>
-          </div>
-          <div class="mock-browser-body">
-            <div class="mock-browser-logo" id="modal-browser-logo">&#127925;</div>
-            <div class="mock-browser-title" id="modal-browser-title">BeatWave</div>
-            <p class="mock-browser-desc" id="modal-browser-desc">
+
+        <!-- Project hero row -->
+        <div class="preview-modal-hero">
+          <div class="preview-modal-hero-logo" id="modal-hero-logo">&#127925;</div>
+          <div>
+            <div class="preview-modal-hero-title" id="modal-hero-title">BeatWave</div>
+            <p class="preview-modal-desc" id="modal-browser-desc">
               High-fidelity music streaming client loaded with responsive controls.
             </p>
+            <div class="preview-modal-url" id="modal-browser-url">https://beatwave.oneapp.dev</div>
           </div>
         </div>
 
@@ -818,12 +800,24 @@ function initProjectPreviews() {
   const closeBtn = modal.querySelector('#modal-close-btn');
   closeBtn.addEventListener('click', () => {
     modal.classList.remove('active');
+    unlockScroll();
   });
 
   // Listen to clicks inside modal overlay to close it
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.remove('active');
+      unlockScroll();
+    }
+  });
+
+  // Lock page scroll while the modal is open (Escape also closes)
+  function lockScroll() { document.body.style.overflow = 'hidden'; }
+  function unlockScroll() { document.body.style.overflow = ''; }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      modal.classList.remove('active');
+      unlockScroll();
     }
   });
 
@@ -831,7 +825,7 @@ function initProjectPreviews() {
   const projectMetadata = {
     'beatwave': {
       title: 'BeatWave Music',
-      logo: '<img src="assets/beatwavepng.png" style="width:100%;height:100%;object-fit:cover;border-radius:0px;border:2px solid var(--border);">',
+      logo: '<img src="assets/beatwavepng.png" alt="BeatWave">',
       url: 'https://beatwave.oneapp.dev',
       desc: 'An open-source high-fidelity audio streaming client designed for seamless background media runtimes with zero telemetry tracking.',
       runtime: 'React SPAs Client',
@@ -840,7 +834,7 @@ function initProjectPreviews() {
     },
     'wavemirror': {
       title: 'WaveMirror Movies',
-      logo: '<img src="assets/wavemirror.png" style="width:100%;height:100%;object-fit:cover;border-radius:0px;border:2px solid var(--border);">',
+      logo: '<img src="assets/wavemirror.png" alt="WaveMirror">',
       url: 'https://wavemirrors.netlify.app',
       desc: 'Lightweight media portal querying open APIs with fast search results filters and responsive cards layouts.',
       runtime: 'HTML5 / CSS / Vanilla JS',
@@ -849,7 +843,7 @@ function initProjectPreviews() {
     },
     'onyx': {
       title: 'Onyx Secure Chat',
-      logo: '<img src="assets/onyx logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:0px; border: 2px solid var(--border);">' ,
+      logo: '<img src="assets/onyx logo.png" alt="Onyx Chat">',
       url: 'https://onyxchat.netlify.app',
       desc: 'Low-latency messaging module connecting clients over WebSockets and securing packets exchange routing.',
       runtime: 'NodeJS Socket Server',
@@ -914,15 +908,16 @@ function initProjectPreviews() {
         // Populate modal parameters
         modal.querySelector('#modal-project-title').textContent = data.title;
         modal.querySelector('#modal-browser-url').textContent = data.url;
-        modal.querySelector('#modal-browser-logo').innerHTML = data.logo;
-        modal.querySelector('#modal-browser-title').textContent = data.title;
+        modal.querySelector('#modal-hero-logo').innerHTML = data.logo;
+        modal.querySelector('#modal-hero-title').textContent = data.title;
         modal.querySelector('#modal-browser-desc').textContent = data.desc;
         modal.querySelector('#modal-spec-runtime').textContent = data.runtime;
         modal.querySelector('#modal-spec-speed').textContent = data.speed;
         modal.querySelector('#modal-spec-db').textContent = data.db;
 
-        // Open modal
+        // Open modal and lock page scroll beneath it
         modal.classList.add('active');
+        lockScroll();
       });
     }
   });
@@ -983,3 +978,103 @@ function initBeatwaveTicker() {
     }
   }
 }
+
+/* ==========================================================================
+   15. Scroll Progress Bar & Dynamic Header Elevation
+   ========================================================================== */
+function initScrollProgress() {
+  const progressBar = document.getElementById('scroll-progress-bar');
+  const headerWrapper = document.querySelector('.header-wrapper');
+
+  let ticking = false;
+
+  function updateScroll() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+
+    if (progressBar) {
+      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }
+
+    if (headerWrapper) {
+      if (scrollY > 30) {
+        headerWrapper.classList.add('scrolled');
+      } else {
+        headerWrapper.classList.remove('scrolled');
+      }
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateScroll();
+}
+
+/* ==========================================================================
+   16. Animated Metric Numerical Counters
+   ========================================================================== */
+function initStatCounters() {
+  const statElements = document.querySelectorAll('.stat-num, .hero-stat-num');
+  if (statElements.length === 0) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15
+  });
+
+  statElements.forEach(el => {
+    const raw = el.textContent.trim();
+    el.setAttribute('data-target-text', raw);
+    observer.observe(el);
+  });
+
+  function animateCounter(el) {
+    const raw = el.getAttribute('data-target-text') || el.textContent.trim();
+    
+    // Parse prefix (e.g. "<"), numeric portion (e.g. "0.6", "30", "99.9", "150"), suffix (e.g. "%+", "%", "s", "+")
+    const match = raw.match(/^([^\d.]*)(\d+(?:\.\d+)?)(.*)$/);
+    if (!match) return;
+
+    const prefix = match[1] || '';
+    const targetVal = parseFloat(match[2]);
+    const suffix = match[3] || '';
+    const decimals = (match[2].split('.')[1] || '').length;
+
+    const duration = 1500;
+    const startTime = performance.now();
+
+    function step(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Exponential ease-out curve for high-end organic deceleration
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const currentVal = targetVal * ease;
+
+      el.textContent = `${prefix}${currentVal.toFixed(decimals)}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = raw; // Final exact value guarantee
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+}
+

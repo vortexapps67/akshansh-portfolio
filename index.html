@@ -21,15 +21,20 @@
 
   <div class="preloader" id="preloader">
     <div class="loader-content">
-      <img src="assets/logo.png" alt="Akshansh Sinha" class="loader-logo">
+      <div class="loader-logo-wrap"><img src="assets/logo.png" alt="Akshansh Sinha" class="loader-logo"></div>
       <div class="loader-text">AKSHANSH SINHA</div>
     </div>
   </div>
 
-  <canvas id="canvas-particles"></canvas>
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+  </div>
   <div class="cursor-spotlight" id="cursor-spotlight"></div>
   <div class="cursor-follower" id="cursor-follower"></div>
   <div class="page-transition-overlay" id="page-transition-overlay"></div>
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
 
   <div class="header-wrapper">
     <header class="header-container">
@@ -61,7 +66,7 @@
           <span class="hero-badge-dot"></span>
           Open to Projects &amp; Collabs
         </div>
-        <h1 class="hero-title">
+        <h1 class="hero-title reveal-blur">
           Building the <span class="grad">web</span><br>that moves.
         </h1>
         <p class="hero-desc">
@@ -85,9 +90,16 @@
             <span class="hero-stat-lbl">Uptime</span>
           </div>
         </div>
+        <a href="#agencies" class="hero-scroll-cue" aria-label="Scroll down to content">
+          <div class="hero-scroll-mouse">
+            <span class="hero-scroll-dot"></span>
+          </div>
+          <span>Scroll to explore</span>
+        </a>
       </div>
       <div class="hero-right reveal reveal-delay-1">
-        <div class="hero-visual-frame">
+        <div class="orb" aria-hidden="true">
+          <div class="orb-ring"></div>
           <img src="assets/logo.png" alt="Akshansh Sinha">
         </div>
       </div>
@@ -129,9 +141,9 @@
   <main class="container" style="padding-top:0">
 
     <!-- Agencies -->
-    <section class="reveal">
-      <span class="section-label">Founded By Me</span>
-      <div class="agencies-grid">
+    <section class="reveal" id="agencies">
+      <span class="section-label">01 // Founded Agencies</span>
+      <div class="agencies-grid stagger-group">
         <a href="https://zephyr-devs.vercel.app" target="_blank" rel="noopener" class="agency-card" id="home-zephyr-card">
           <div>
             <div class="agency-logo-row">
@@ -157,8 +169,8 @@
 
     <!-- Capabilities -->
     <section class="reveal">
-      <span class="section-label">What I Build</span>
-      <div class="caps-grid">
+      <span class="section-label">02 // Capabilities</span>
+      <div class="caps-grid stagger-group">
         <div class="cap-card">
           <span class="cap-icon">&#9881;</span>
           <div class="cap-title">Web Architecture</div>
@@ -179,8 +191,8 @@
 
     <!-- Stats -->
     <section class="reveal">
-      <span class="section-label">By the Numbers</span>
-      <div class="stats-grid">
+      <span class="section-label">03 // Key Metrics</span>
+      <div class="stats-grid stagger-group">
         <div class="stat-card"><span class="stat-num">99.9%</span><span class="stat-lbl">Hosting Uptime</span></div>
         <div class="stat-card"><span class="stat-num">&lt;0.6s</span><span class="stat-lbl">Avg Load Speed</span></div>
         <div class="stat-card"><span class="stat-num">30+</span><span class="stat-lbl">Production Deploys</span></div>
@@ -192,13 +204,13 @@
     <section class="reveal">
       <div class="section-head-row">
         <div>
-          <span class="section-label">Selected Work</span>
+          <span class="section-label">04 // Selected Work</span>
           <div class="section-title-lg">Featured Projects</div>
         </div>
         <a href="projects.html" class="view-all-link">View all &#8594;</a>
       </div>
 
-      <div class="featured-grid">
+      <div class="featured-grid stagger-group">
         <!-- BeatWave -->
         <div class="project-card" id="feat-beatwave">
           <div class="project-card-header">
@@ -254,7 +266,7 @@
 
     <!-- Contact CTA -->
     <section class="contact-cta-strip reveal">
-      <span class="section-label">Get In Touch</span>
+      <span class="section-label">05 // Get In Touch</span>
       <div class="section-title-lg">Let's build something.</div>
       <p>Have a project in mind? Drop a message and let's discuss how to bring it to life.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center;">

@@ -1,0 +1,132 @@
+/* Hallmark · macrostructure: Marquee Hero (monochrome glass rebuild) · genre: atmospheric
+ * theme: custom "Monolith" · vibe: "black & white typography over soft white light"
+ * paper oklch(10% 0.008 285) · accent oklch(97% 0.004 285) white
+ * display: Syne · body: Manrope · mono: JetBrains Mono
+ * axes: dark paper / display-sans (Syne) / neutral (white accent)
+ * design-system: design.md · intended-for: Akshansh.dev portfolio
+ */
+
+:root {
+  /* Colour — dark (default). Monochrome: every neutral tinted 285, chroma ≤ 0.008 */
+  --paper:        oklch(10% 0.008 285);
+  --paper-2:      oklch(14% 0.008 285);
+  --ink:          oklch(97% 0.004 285);
+  --ink-2:        oklch(72% 0.005 285);
+  --ink-3:        oklch(52% 0.005 285);
+  --accent:       oklch(97% 0.004 285);
+  --accent-2:     oklch(72% 0.005 285);
+  --accent-ink:   oklch(10% 0.008 285);
+  --focus:        oklch(97% 0.004 285);
+
+  /* Glass recipe — white light held in frosted panes */
+  --glass:        oklch(92% 0.005 285 / 0.05);
+  --glass-strong: oklch(94% 0.004 285 / 0.09);
+  --glass-border: oklch(95% 0.004 285 / 0.13);
+  --glass-border-hover: oklch(95% 0.004 285 / 0.32);
+  --glass-highlight: oklch(98% 0.003 285 / 0.35);
+  --blur:         20px;
+
+  /* Aurora — soft white light blooms, no hue */
+  --aurora-1:     oklch(75% 0.005 285 / 0.13);
+  --aurora-2:     oklch(65% 0.005 285 / 0.1);
+  --aurora-3:     oklch(85% 0.005 285 / 0.07);
+
+  /* Shadows & veils */
+  --shadow-deep:  oklch(5% 0.005 285 / 0.4);
+  --shadow-light: oklch(30% 0.01 285 / 0.15);
+  --veil:         oklch(5% 0.005 285 / 0.6);
+
+  /* Hairline rules — the monochrome divider language */
+  --rule:         oklch(97% 0.004 285 / 0.12);
+
+  /* Fonts */
+  --font-display: "Syne", "Segoe UI", sans-serif;
+  --font-body:    "Manrope", "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", Consolas, monospace;
+
+  /* Spacing (4-pt) */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  /* Type scale — typography carries the design; display runs large and tight */
+  --text-xs:  0.75rem;
+  --text-sm:  0.88rem;
+  --text-md:  1.02rem;
+  --text-lg:  1.22rem;
+  --text-xl:  1.55rem;
+  --text-2xl: 2.1rem;
+  --text-display-s: clamp(2.1rem, 4.6vw, 3.4rem);
+  --text-display:   clamp(2.8rem, 7.5vw, 5.4rem);
+
+  /* Tracking (letter-spacing) */
+  --tracking-tighter: -0.04em;
+  --tracking-tight:   -0.025em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.06em;
+  --tracking-wider:   0.14em;
+  --tracking-widest:  0.26em;
+
+  /* Leading (line-height) */
+  --leading-none:    1.02;
+  --leading-tight:   1.12;
+  --leading-snug:    1.3;
+  --leading-normal:  1.65;
+  --leading-relaxed: 1.8;
+
+  /* Motion */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 200ms;
+  --dur-2: 400ms;
+  --dur-3: 750ms;
+
+  /* Luminous text gradients */
+  --text-shimmer: linear-gradient(135deg, var(--ink) 0%, color-mix(in oklab, var(--ink) 70%, var(--accent-2)) 100%);
+  --accent-glow: color-mix(in oklab, var(--accent) 30%, transparent);
+
+  /* Radius */
+  --radius-card:  20px;
+  --radius-input: 12px;
+  --radius-pill:  999px;
+
+  /* Layout */
+  --nav-h: 76px;
+  --max-w: 1160px;
+}
+
+/* Light variant — ink on paper, the classic luxury print inversion */
+body.light-theme {
+  --paper:        oklch(97% 0.004 285);
+  --paper-2:      oklch(93% 0.005 285);
+  --ink:          oklch(12% 0.008 285);
+  --ink-2:        oklch(35% 0.008 285);
+  --ink-3:        oklch(45% 0.008 285);
+  --accent:       oklch(12% 0.008 285);
+  --accent-2:     oklch(40% 0.008 285);
+  --accent-ink:   oklch(98% 0.004 285);
+  --focus:        oklch(12% 0.008 285);
+
+  --glass:        oklch(99% 0.003 285 / 0.55);
+  --glass-strong: oklch(99% 0.003 285 / 0.72);
+  --glass-border: oklch(99% 0.003 285 / 0.8);
+  --glass-border-hover: oklch(99% 0.003 285 / 1);
+  --glass-highlight: oklch(99% 0.003 285 / 0.9);
+
+  --aurora-1:     oklch(70% 0.005 285 / 0.14);
+  --aurora-2:     oklch(60% 0.005 285 / 0.1);
+  --aurora-3:     oklch(80% 0.005 285 / 0.08);
+
+  --shadow-deep:  oklch(30% 0.01 285 / 0.12);
+  --shadow-light: oklch(30% 0.01 285 / 0.15);
+  --veil:         oklch(30% 0.008 285 / 0.35);
+
+  --rule:         oklch(12% 0.008 285 / 0.14);
+}
