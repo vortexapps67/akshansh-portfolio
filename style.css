@@ -210,14 +210,15 @@ body.light-theme .header-wrapper.scrolled .header-container{background:color-mix
 /* Hero word-stagger entrance animation */
 .hero-word{display:inline-block;opacity:0;transform:translateY(40px);filter:blur(10px);animation:hero-word-in 0.9s var(--ease-spring) forwards}
 @keyframes hero-word-in{to{opacity:1;transform:translateY(0);filter:blur(0)}}
-.hero-word:nth-child(1){animation-delay:0.15s}
-.hero-word:nth-child(2){animation-delay:0.28s}
-.hero-word:nth-child(3){animation-delay:0.42s}
-.hero-word:nth-child(4){animation-delay:0.56s}
-.hero-word:nth-child(5){animation-delay:0.68s}
+.hero-word:nth-of-type(1){animation-delay:0.15s}
+.hero-word:nth-of-type(2){animation-delay:0.28s}
+.hero-word:nth-of-type(3){animation-delay:0.42s}
+.hero-word:nth-of-type(4){animation-delay:0.56s}
+.hero-word:nth-of-type(5){animation-delay:0.68s}
 
 /* Luminous high-contrast accent flourish with specular sweep */
 .grad{background:linear-gradient(135deg,var(--ink) 15%,color-mix(in oklab,var(--accent) 70%,var(--accent-2) 30%) 45%,var(--accent-2) 75%,var(--ink) 95%);background-size:220% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 28px color-mix(in oklab,var(--accent) 28%,transparent));display:inline-block;animation:specular-sweep 8s ease-in-out infinite alternate}
+.hero-word.grad{animation:hero-word-in 0.9s var(--ease-spring) 0.42s forwards, specular-sweep 8s ease-in-out infinite alternate}
 @keyframes specular-sweep{0%{background-position:0% 50%}100%{background-position:100% 50%}}
 .hero-desc{font-size:1.08rem;color:var(--ink-2);max-width:540px;line-height:var(--leading-relaxed);margin-bottom:var(--space-lg);text-wrap:pretty}
 .btn-group{display:flex;gap:var(--space-sm);flex-wrap:wrap}
