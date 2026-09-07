@@ -14,10 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvasParticles();
   initPageTransitions();
   initMagneticHover();
+  initButtonRipples();
   initProjectPreviews();
   initBeatwaveTicker();
   initScrollProgress();
   initStatCounters();
+  initUpiCopy();
+  initAuroraParallax();
+  initFloatingParticles();
 });
 
 /* Cursor Spotlight Glow */
@@ -38,9 +42,11 @@ function initTheme() {
   
   if (currentTheme === 'light') {
     document.body.classList.add('light-theme');
+    document.documentElement.setAttribute('data-theme', 'light');
     updateToggleIcons('light');
   } else {
     document.body.classList.remove('light-theme');
+    document.documentElement.setAttribute('data-theme', 'dark');
     updateToggleIcons('dark');
   }
 
@@ -53,6 +59,7 @@ function initTheme() {
         theme = 'light';
       }
       
+      document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
       updateToggleIcons(theme);
     });
@@ -207,13 +214,34 @@ function initCardSpotlight() {
   const cards = document.querySelectorAll('.agency-card, .cap-card, .stat-card, .project-card, .contact-card-item');
   if (cards.length === 0) return;
 
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.innerWidth < 768;
+
   cards.forEach(card => {
+    const enableTilt = !isReducedMotion && !isMobile && (card.classList.contains('project-card') || card.classList.contains('agency-card'));
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
+
+      if (enableTilt) {
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const normX = (x - centerX) / centerX;
+        const normY = (y - centerY) / centerY;
+        const tiltX = -(normY * 3.5).toFixed(2);
+        const tiltY = (normX * 3.5).toFixed(2);
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px) scale(1.01)`;
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (enableTilt) {
+        card.style.transform = '';
+      }
     });
   });
 }
@@ -228,26 +256,24 @@ function initProjectsFilter() {
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      if (tab.classList.contains('active')) return;
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
 
       const filterVal = tab.getAttribute('data-filter');
 
-      cards.forEach(card => {
+      cards.forEach((card, idx) => {
         const agency = card.getAttribute('data-agency');
+        const matches = (filterVal === 'all' || agency === filterVal);
 
-        if (filterVal === 'all' || agency === filterVal) {
-          card.style.display = 'flex';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0) scale(1)';
-          }, 50);
+        if (matches) {
+          card.classList.remove('filter-hidden');
+          card.style.transitionDelay = `${idx * 40}ms`;
+          card.style.opacity = '1';
+          card.style.transform = '';
         } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(15px) scale(0.97)';
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 300);
+          card.style.transitionDelay = '0ms';
+          card.classList.add('filter-hidden');
         }
       });
     });
@@ -262,18 +288,93 @@ function initMobileMenu() {
   const navLinks = document.getElementById('nav-links');
   if (!toggleBtn || !navLinks) return;
 
-  toggleBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-    toggleBtn.innerHTML = navLinks.classList.contains('open') ? '&#10005;' : '&#9776;';
+  const closeMenu = () => {
+    navLinks.classList.remove('open');
+    toggleBtn.innerHTML = '&#9776;';
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = navLinks.classList.toggle('open');
+    toggleBtn.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+    toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
   const items = navLinks.querySelectorAll('a');
   items.forEach(item => {
-    item.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      toggleBtn.innerHTML = '&#9776;';
+    item.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && e.target !== toggleBtn) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+}
+
+/* ==========================================================================
+   6b. UPI Clipboard Copy Handler
+   ========================================================================== */
+function initUpiCopy() {
+  const copyBtns = document.querySelectorAll('.copy-upi-btn');
+  copyBtns.forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const upiId = btn.getAttribute('data-upi') || 'akshanshsinha67@axl';
+      try {
+        await navigator.clipboard.writeText(upiId);
+        showToast(`UPI ID copied: ${upiId}`, '📋');
+        const statusSpan = btn.querySelector('.copy-status');
+        const originalText = statusSpan ? statusSpan.textContent : '';
+        if (statusSpan) statusSpan.textContent = '✓ Copied!';
+        btn.style.color = 'var(--accent-2)';
+        setTimeout(() => {
+          if (statusSpan) statusSpan.textContent = originalText || '📋';
+          btn.style.color = '';
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = upiId;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast(`UPI ID copied: ${upiId}`, '📋');
+      }
     });
   });
+}
+
+/* ==========================================================================
+   6c. Floating Glass Toast System
+   ========================================================================== */
+let toastTimeout = null;
+function showToast(message, icon = '✓') {
+  let toast = document.getElementById('global-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'global-toast';
+    toast.className = 'toast-notification';
+    document.body.appendChild(toast);
+  }
+  
+  toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+  toast.classList.add('active');
+  
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('active');
+  }, 3200);
 }
 
 /* ==========================================================================
@@ -344,14 +445,14 @@ function initWebhookContact() {
       });
 
       if (response.ok) {
-        alert('Your message was successfully sent to Akshansh Sinha! Thank you.');
+        showToast('Message delivered successfully to Discord!', '✓');
         form.reset();
       } else {
         throw new Error('Webhook POST failed');
       }
     } catch (error) {
       console.error('Webhook error:', error);
-      alert('There was a problem sending the webhook. Please try contacting directly at akshanshsinha890@gmail.com.');
+      showToast('Could not deliver message. Direct email: akshanshsinha890@gmail.com', '⚠');
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -719,10 +820,10 @@ function initPageTransitions() {
    11. Magnetic Hover Physics on Interactive Elements
    ========================================================================== */
 function initMagneticHover() {
-  const magnetics = document.querySelectorAll('.btn, .nav-brand, .theme-toggle-btn, .chat-bubble-trigger, .agency-card, .filter-tab');
+  const magnetics = document.querySelectorAll('.btn, .nav-brand, .theme-toggle-btn, .chat-bubble-trigger, .filter-tab');
   
-  // Disable magnetic hover on mobile
-  if (window.innerWidth < 768) return;
+  // Disable magnetic hover on mobile or reduced motion
+  if (window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   magnetics.forEach(elem => {
     elem.addEventListener('mousemove', (e) => {
@@ -730,23 +831,166 @@ function initMagneticHover() {
       const elemCenterX = rect.left + rect.width / 2;
       const elemCenterY = rect.top + rect.height / 2;
       
-      // Distance from mouse to element center
       const deltaX = e.clientX - elemCenterX;
       const deltaY = e.clientY - elemCenterY;
 
-      // Translate element by fractional offset (max 15px)
-      elem.style.transform = `translate(${deltaX * 0.28}px, ${deltaY * 0.28}px) scale(1.02)`;
-      elem.style.boxShadow = '0 12px 25px rgba(0,0,0,0.15)';
+      // Clamped smooth translation (max 10px) with spring tracking
+      const clampedX = Math.max(-10, Math.min(10, deltaX * 0.22));
+      const clampedY = Math.max(-10, Math.min(10, deltaY * 0.22));
+
+      elem.style.transition = 'transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease';
+      elem.style.transform = `translate(${clampedX}px, ${clampedY}px) scale(1.02)`;
+      elem.style.boxShadow = '0 12px 28px rgba(0,0,0,0.18)';
     });
 
     elem.addEventListener('mouseleave', () => {
+      elem.style.transition = 'transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease';
       elem.style.transform = '';
       elem.style.boxShadow = '';
     });
   });
 }
 
-// GitHub live-stat fetching removed in the Aurora Glass rebuild — stats are static copy now.
+/* ==========================================================================
+   11b. Tactile Button Click Ripple Effect
+   ========================================================================== */
+function initButtonRipples() {
+  const rippleTargets = document.querySelectorAll('.btn, .filter-tab, .btn-download-action, .upi-support-btn');
+  rippleTargets.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'btn-ripple';
+      
+      const size = Math.max(rect.width, rect.height) * 1.5;
+      ripple.style.width = `${size}px`;
+      ripple.style.height = `${size}px`;
+      
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      
+      btn.appendChild(ripple);
+      setTimeout(() => {
+        ripple.remove();
+      }, 650);
+    });
+  });
+}
+
+// GitHub live-stat fetching removed in the Aurora Glass rebuild: stats are static copy now.
+
+/* ==========================================================================
+   11c. Aurora Blob Parallax on Mouse
+   ========================================================================== */
+function initAuroraParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 768) return;
+
+  const blobs = document.querySelectorAll('.aurora-blob');
+  if (!blobs.length) return;
+
+  // Wrap each blob in a shell that receives the parallax translate
+  // The CSS drift animation stays on the inner blob, shell handles mouse offset
+  const shells = [];
+  blobs.forEach((blob) => {
+    const shell = document.createElement('div');
+    shell.style.cssText = 'position:absolute;inset:0;pointer-events:none;will-change:transform;';
+    blob.parentNode.insertBefore(shell, blob);
+    shell.appendChild(blob);
+    shells.push(shell);
+  });
+
+  // Each shell gets a different parallax depth factor
+  const depths = [0.012, 0.02, 0.008, 0.016, 0.024];
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let currentX = mouseX;
+  let currentY = mouseY;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function tick() {
+    currentX += (mouseX - currentX) * 0.04;
+    currentY += (mouseY - currentY) * 0.04;
+
+    const dx = currentX - window.innerWidth / 2;
+    const dy = currentY - window.innerHeight / 2;
+
+    shells.forEach((shell, i) => {
+      const depth = depths[i] || 0.01;
+      const tx = dx * depth;
+      const ty = dy * depth;
+      shell.style.transform = `translate(${tx}px, ${ty}px)`;
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  tick();
+}
+
+
+/* ==========================================================================
+   11d. Ambient Floating Particles
+   ========================================================================== */
+function initFloatingParticles() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const aurora = document.querySelector('.aurora');
+  if (!aurora) return;
+
+  const COUNT = 22;
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < COUNT; i++) {
+    const dot = document.createElement('div');
+    const size = Math.random() * 3 + 1.5; // 1.5px to 4.5px
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const duration = Math.random() * 20 + 14; // 14s to 34s
+    const delay = Math.random() * -30; // negative = already mid-animation
+    const opacity = Math.random() * 0.22 + 0.06;
+    const driftX = (Math.random() - 0.5) * 120;
+    const driftY = -(Math.random() * 180 + 60); // always drift upward
+
+    dot.style.cssText = `
+      position:absolute;
+      width:${size}px;
+      height:${size}px;
+      border-radius:50%;
+      left:${x}%;
+      top:${y}%;
+      background:oklch(90% 0.01 215);
+      opacity:${opacity};
+      pointer-events:none;
+      will-change:transform,opacity;
+      animation:fp-float-${i} ${duration}s ${delay}s linear infinite;
+    `;
+
+    // Inject a unique keyframe per particle
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `
+      @keyframes fp-float-${i} {
+        0%   { transform: translate(0, 0) scale(1);   opacity: ${opacity}; }
+        40%  { opacity: ${Math.min(opacity * 1.8, 0.5)}; }
+        100% { transform: translate(${driftX}px, ${driftY}px) scale(0.3); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(styleTag);
+
+    fragment.appendChild(dot);
+  }
+
+  aurora.appendChild(fragment);
+}
+
+
 
 /* ==========================================================================
    13. Project Spec Mockup Modals

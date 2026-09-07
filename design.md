@@ -1,65 +1,67 @@
-# Design — Akshansh Sinha Portfolio (AKSHANSH.dev)
+# Design: Akshansh Sinha Portfolio (AKSHANSH.dev)
 
 A locked design system for this site. Every page reads this file before emitting
-code. Do not regenerate per page — extend or amend this file when the system
+code. Do not regenerate per page: extend or amend this file when the system
 needs to grow.
 
 ## Genre
-atmospheric (dark glass, aurora field, frosted surfaces)
+atmospheric (deep obsidian glass, monochrome typography, luminous ice-cyan aurora light)
 
-## Macrostructure family
-- Marketing pages (index): Marquee Hero — glass hero + tech marquee + bento glass sections
-- Portfolio pages (projects): Filterable Glass Grid
-- Profile/legal pages (about, privacy, terms): Long Document on glass — two-column with sidebar
+## Macrostructure Family
+- Marketing pages (index.html): Marquee Hero: monumental title, verified metrics proof bar, tech marquee, bento cards, UPI creator backing card
+- Portfolio pages (projects.html): Filterable Grid with modal preview sheets and live APK download counters
+- Profile & Legal pages (about.html, privacy.html, terms.html): Two-column Editorial narrative with sticky sidebar coordinates
+- Inquiry page (contact.html): Tactical Handshake Form with instant Discord webhook bridge and contact coordinates
 
-## Theme — "Aurora Glass"
-- `--paper`      oklch(13% 0.035 285)   deep violet-navy
-- `--paper-2`    oklch(17% 0.045 290)
-- `--ink`        oklch(96% 0.012 285)
-- `--ink-2`      oklch(74% 0.025 285)
-- `--ink-3`      oklch(56% 0.02 285)
-- `--accent`     oklch(70% 0.19 300)    electric violet
-- `--accent-2`   oklch(78% 0.13 210)    cyan
-- `--focus`      oklch(78% 0.13 210)
-- Glass surfaces: white at 4–9% alpha + `backdrop-filter: blur(20px) saturate(150%)`
-- Light variant: paper `oklch(96% 0.015 285)`, pastel aurora, glass white 55–70% alpha
+## Theme: "Monolith Specular"
+- `--paper`        oklch(10% 0.008 285)   deep obsidian
+- `--paper-2`      oklch(13.5% 0.012 285) solid card obsidian surface
+- `--ink`          oklch(97.5% 0.004 285) specular white
+- `--ink-2`        oklch(78% 0.006 285)   crisp body text (WCAG AA > 5.5:1)
+- `--ink-3`        oklch(62% 0.006 285)   labels and secondary coordinates (WCAG AA > 4.5:1)
+- `--accent`       oklch(97.5% 0.004 285) white specular highlight
+- `--accent-2`     oklch(78% 0.12 215)    ice-cyan accent
+- `--accent-ink`   oklch(10% 0.008 285)   deep ink for solid buttons
+- `--focus`        oklch(78% 0.12 215)    high-visibility focus ring
+
+## Surface & Glass Discipline (Hallmark Anti-Slop R-10)
+- Dose-capped glass: `backdrop-filter` is strictly reserved for floating system overlays (the N5 floating pill navigation bar, the mobile drawer, modals, and the chat popover).
+- In-page content cards (agency cards, capability rows, stat cards, project cards, sidebar boxes, contact cards): solid obsidian paper surface (`var(--paper-2)`) with crisp 1px specular border (`var(--glass-border)`) and top specular hairline highlight (`inset 0 1px 0 var(--glass-highlight)`). Zero battery drain, zero muddy glass soup.
+- Light theme: clean titanium paper `oklch(97% 0.004 285)`, deep ink `oklch(12% 0.008 285)`, crisp card surfaces.
 
 ## Typography
-- Display: Syne, weight 700–800, style normal (roman only — never italic headers)
-- Body:    Manrope, weight 400–500
-- Mono:    JetBrains Mono, weight 500–700 (labels, chips, stats)
-- Display tracking: -0.02em; sentence case (no all-caps headings)
-- Hero anchor: clamp(2.75rem, 7vw, 5rem)
+- Display: Syne, weight 600–800, style normal (roman only: never italic headers)
+- Body: Manrope, weight 400–500
+- Mono: JetBrains Mono, weight 500–700 (labels, chips, stats, coordinates)
+- Display tracking: -0.03em; sentence case or crisp title case (no all-caps screaming headers)
+- Hero anchor: clamp(2.8rem, 7.5vw, 5.4rem)
+- Strict ban on em-dashes (`—`) in UI copy: use `:`, `,`, or `|`.
 
-## Spacing
-4-point named scale in `tokens.css`. Pages use named tokens, never raw values.
+## Spacing & Geometry
+- 4-point named scale in `tokens.css` (`--space-3xs` through `--space-3xl`).
+- Geometric radii (Anti-Slop R-08, R-11):
+  - Buttons: `--radius-btn: 10px`
+  - Inputs: `--radius-input: 10px`
+  - Cards: `--radius-card: 16px`
+  - Pills: `--radius-pill: 9999px` strictly reserved for chips, tags, status pills, and the N5 floating capsule.
 
-## Motion
-- Easings: `--ease-out: cubic-bezier(0.22, 1, 0.36, 1)`
-- Aurora: 3 blurred blobs, translate/scale drift, 18–26s loops
-- Reveal pattern: fade + 24px rise (IntersectionObserver, `.reveal`)
-- Hover: lift + border glow on glass cards
-- Reduced-motion: all spatial motion collapses to ≤150ms opacity; aurora blobs freeze
+## Motion & Interactivity
+- Easings: `--ease-out: cubic-bezier(0.22, 1, 0.36, 1)`, `--ease-spring: cubic-bezier(0.16, 1, 0.3, 1)`
+- Aurora: 3 blurred blobs, translate/scale drift, 19–26s loops
+- Reveal pattern: multi-variant IntersectionObserver (`.reveal-blur`, `.reveal-up`, `.reveal-scale`, `.stagger-group`)
+- Focus ring: `outline: 2px solid var(--focus); outline-offset: 3px;` (Anti-Slop R-32: Keyboard Accessible)
+- Reduced motion: all spatial motion collapses to ≤150ms opacity; aurora blobs freeze
 
-## Microinteractions stance
-- Silent success; no celebratory toasts
-- Focus ring: 2px cyan, instant (never animated)
-- Magnetic hover: softened (max 8px), pointer devices only
+## CTA Voice
+- Primary: solid specular button (`--accent`), deep ink text (`--accent-ink`), clean hover lift
+- Secondary: obsidian surface, 1px specular border, ink text
+- No decorative arrow appendages (`&rarr;`, `&#8599;`) on buttons by default
 
-## CTA voice
-- Primary: solid violet pill (`--accent`), dark ink text, soft violet glow shadow
-- Secondary: glass pill, 1px glass border, ink text
-- No gradient fills on text or pill buttons — gradients live only in the aurora background
+## What Pages MUST Share
+- Wordmark `AKSHANSH.dev`, live status dot, fonts, CTA voice, solid card surface recipe, section heading rhythm (`.section-label` + Syne heading)
 
-## What pages MUST share
-- Wordmark AKSHANSH.dev, accent gradient usage (≤ 5% per viewport), fonts,
-  CTA voice, glass card recipe, section heading rhythm (mono label + Syne heading)
-
-## What pages MAY differ on
-- Macrostructure within the page-type family; enrichment only on index (Tier-A CSS art)
-
-## Exports
-
-### tokens.css
-See `tokens.css` at project root — single source for all colour, font, space,
-text, ease, duration and radius tokens. `style.css` imports it.
+## Verified Metrics
+- 30+ Production Deployments
+- 2 Venture Studios (Zephyr Devs & Vortex Apps)
+- 2,600+ BeatWave APK Downloads
+- 100% Ad-Free Open Source
