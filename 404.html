@@ -1,0 +1,124 @@
+﻿<!-- Hallmark · pre-emit critique: P5 H5 E5 S4 R5 V5 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404: Coordinate Not Found | Akshansh Sinha</title>
+  <meta name="description" content="404: System coordinate not found. Return to Akshansh Sinha's engineering portfolio.">
+  <meta name="author" content="Akshansh Sinha">
+  <meta property="og:title" content="404: Coordinate Not Found | Akshansh Sinha">
+  <meta property="og:description" content="System coordinate not found. Return to Akshansh Sinha's engineering portfolio.">
+  <meta property="og:image" content="assets/logo.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="preloader" id="preloader">
+    <div class="loader-content">
+      <div class="loader-logo-wrap"><img src="assets/logo.png" alt="Akshansh" class="loader-logo"></div>
+      <div class="loader-text">AKSHANSH SINHA</div>
+    </div>
+  </div>
+
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+    <div class="aurora-blob aurora-blob-4"></div>
+    <div class="aurora-blob aurora-blob-5"></div>
+  </div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="progressive-blur-top" aria-hidden="true">
+    <div></div><div></div><div></div><div></div>
+  </div>
+  <div class="progressive-blur-bottom" aria-hidden="true"></div>
+  <div class="cursor-spotlight" id="cursor-spotlight"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+  <div class="page-transition-overlay" id="page-transition-overlay"></div>
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <div class="header-wrapper">
+    <header class="header-container">
+      <a href="index.html" class="nav-brand">
+        <img src="assets/logo.png" alt="Akshansh" class="nav-brand-img">
+        AKSHANSH<span>.dev</span>
+      </a>
+      <div class="nav-right-container">
+        <nav>
+          <ul class="nav-links" id="nav-links">
+            <li class="nav-link"><a href="index.html">Home</a></li>
+            <li class="nav-link"><a href="about.html">About</a></li>
+            <li class="nav-link"><a href="projects.html">Projects</a></li>
+            <li class="nav-link"><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Switch Theme">&#9788;</button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
+      </div>
+    </header>
+  </div>
+
+  <main class="container">
+    <section class="error-layout">
+      <div class="hero-hud" aria-label="Error Status">
+        <span class="hero-hud-dot" style="background:#ff4d4d;box-shadow:0 0 10px #ff4d4d;"></span>
+        <span>SYS_STATUS // ROUTE_UNRESOLVED</span>
+        <span class="hero-hud-sep">/</span>
+        <span class="hero-hud-val" style="color:#ff6b6b;">ERR_404</span>
+      </div>
+
+      <div class="error-code grad">404</div>
+      <h1 class="error-title">Coordinate Not Found.</h1>
+      <p class="error-desc">
+        The system coordinate or route you requested does not exist or has been relocated to another sector. Check the URL or return to the main dashboard.
+      </p>
+
+      <div class="error-hud-box">
+        <div class="error-hud-line">
+          <span class="error-hud-lbl">Requested Path</span>
+          <span class="error-hud-val" id="error-path">/unknown</span>
+        </div>
+        <div class="error-hud-line">
+          <span class="error-hud-lbl">Gateway</span>
+          <span class="error-hud-val">AKSHANSH.dev Core Engine</span>
+        </div>
+        <div class="error-hud-line">
+          <span class="error-hud-lbl">Node Origin</span>
+          <span class="error-hud-val">Patna, IN [25.59°N, 85.14°E]</span>
+        </div>
+        <div class="error-hud-line">
+          <span class="error-hud-lbl">Diagnostic</span>
+          <span class="error-hud-val" style="color:#ff6b6b;">0x00000194 NOT_FOUND</span>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-primary">Return to Home</a>
+        <a href="projects.html" class="btn btn-secondary">View Projects</a>
+        <a href="contact.html" class="btn btn-secondary">Contact Support</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">AKSHANSH<span>.dev</span></div>
+      <div>&copy; 2026 Akshansh Sinha. All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pathEl = document.getElementById('error-path');
+      if (pathEl && window.location.pathname) {
+        pathEl.textContent = window.location.pathname;
+      }
+    });
+  </script>
+</body>
+</html>

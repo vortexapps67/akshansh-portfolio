@@ -507,31 +507,80 @@ footer{position:relative;z-index:2;border-top:1px solid var(--rule);background:v
 .footer-content a{transition:color var(--dur-1) var(--ease-out)}
 .footer-content a:hover{color:var(--accent-2)}
 
-/* ============ Mobile ============ */
+/* ============ 404 Error Page ============ */
+.error-layout{min-height:calc(100vh - var(--nav-h) - 180px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--space-2xl) 0;position:relative;z-index:2}
+.error-code{font-size:clamp(5.5rem,16vw,11rem);font-weight:800;line-height:0.95;letter-spacing:var(--tracking-tighter);margin-bottom:var(--space-xs);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.error-title{font-size:clamp(1.4rem,4vw,2.4rem);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--ink);margin-bottom:var(--space-sm);text-wrap:balance}
+.error-desc{font-size:1rem;color:var(--ink-2);max-width:520px;line-height:var(--leading-relaxed);margin:0 auto var(--space-xl);text-wrap:pretty}
+.error-hud-box{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-card);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-xl);max-width:460px;width:100%;text-align:left;font-family:var(--font-mono);font-size:var(--text-xs);box-shadow:0 8px 32px var(--shadow-deep)}
+.error-hud-line{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--rule);gap:8px}
+.error-hud-line:last-child{border-bottom:none}
+.error-hud-lbl{color:var(--ink-3);text-transform:uppercase;letter-spacing:0.06em}
+.error-hud-val{color:var(--accent-2);font-weight:600;word-break:break-all}
+
+/* ============ Mobile Responsive Optimizations ============ */
 @media(max-width:768px){
-  .hero-layout{grid-template-columns:minmax(0,1fr);gap:var(--space-xl);padding-block-end:var(--space-2xl)}
-  .hero-right{order:-1}
-  .orb{width:min(200px,58vw)}
+  .hero-layout{grid-template-columns:minmax(0,1fr);gap:var(--space-xl);padding-block-end:var(--space-2xl);text-align:left}
+  .hero-right{order:-1;margin-bottom:var(--space-xs)}
+  .orb{width:min(210px,58vw)}
   .hero-stats{gap:var(--space-2xs)}
   .hero-stat-item{padding:var(--space-2xs) var(--space-sm)}
   .agencies-grid{grid-template-columns:minmax(0,1fr)}
-  .cap-card{grid-template-columns:48px minmax(0,1fr);row-gap:var(--space-2xs);padding:var(--space-md)}
-  .cap-desc{grid-column:2}
+  .cap-card{grid-template-columns:44px minmax(0,1fr);row-gap:var(--space-2xs);padding:var(--space-md)}
+  .cap-desc{grid-column:1 / -1}
   .about-layout{grid-template-columns:minmax(0,1fr)}
   .contact-layout{grid-template-columns:minmax(0,1fr)}
   .featured-grid,.projects-grid{grid-template-columns:minmax(0,1fr)}
+  
+  /* Mobile Navigation Drawer */
   .nav-links{display:none}
-  .nav-links.open{display:flex;flex-direction:column;align-items:stretch;position:absolute;top:72px;left:var(--space-sm);right:var(--space-sm);background:var(--glass-strong);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);padding:var(--space-2xs);border:1px solid var(--glass-border);border-radius:20px;box-shadow:0 24px 64px var(--shadow-deep);z-index:499}
-  .nav-links.open .nav-link a{display:block;padding:12px 16px}
+  .nav-links.open{display:flex;flex-direction:column;align-items:stretch;position:absolute;top:68px;left:var(--space-sm);right:var(--space-sm);background:var(--card-bg-elevated);backdrop-filter:blur(32px) saturate(170%);-webkit-backdrop-filter:blur(32px) saturate(170%);padding:var(--space-xs);border:1px solid var(--glass-border-hover);border-radius:20px;box-shadow:0 24px 64px var(--shadow-deep),inset 0 1px 0 var(--glass-highlight);z-index:499;animation:modal-pop 0.22s var(--ease-out)}
+  .nav-links.open .nav-link a{display:flex;align-items:center;padding:14px 18px;min-height:48px;font-size:0.96rem;border-radius:12px}
   .nav-toggle{display:flex}
-  .section-head-row{flex-direction:column;align-items:flex-start}
-  .footer-content{flex-direction:column;text-align:center;justify-content:center}
-  .chat-box-container{width:min(290px,calc(100vw - 32px))}
+  
+  /* Mobile Touch Friendly Tabs */
+  .filter-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .filter-tabs::-webkit-scrollbar{display:none}
+  .filter-tab{padding:10px 18px;min-height:44px;display:inline-flex;align-items:center}
+  
+  .section-head-row{flex-direction:column;align-items:flex-start;gap:var(--space-xs)}
+  .footer-content{flex-direction:column;text-align:center;justify-content:center;gap:var(--space-sm)}
+  .chat-box-container{width:min(320px,calc(100vw - 28px));right:-8px}
   .chat-bubble-wrapper{bottom:var(--space-md);right:var(--space-sm)}
   .preview-modal-specs{grid-template-columns:minmax(0,1fr)}
   .contact-cta-strip{padding:var(--space-xl) var(--space-md)}
   .preview-modal-hero{flex-direction:column;text-align:center}
   .aurora-blob{filter:blur(60px)}
+  .section-blur-ribbon{height:54px;margin:var(--space-lg) 0}
+}
+
+@media(max-width:480px){
+  .header-wrapper{top:6px;padding:0 10px}
+  .header-container{height:56px;padding:0 10px}
+  .nav-brand{font-size:0.96rem;gap:8px}
+  .nav-brand-img{width:26px;height:26px}
+  .theme-toggle-btn,.nav-toggle{width:36px;height:36px;font-size:0.9rem}
+  
+  .hero-hud{font-size:0.62rem;flex-wrap:wrap;gap:6px}
+  .hero-title{font-size:clamp(2.3rem,10vw,3.2rem);letter-spacing:-0.035em}
+  .hero-desc{font-size:0.98rem}
+  
+  .btn-group{flex-direction:column;width:100%;gap:10px}
+  .btn{width:100%;justify-content:center;min-height:46px;padding:12px 20px}
+  
+  .hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+  .hero-stat-item{padding:8px 4px;text-align:center}
+  .hero-stat-num{font-size:1.35rem}
+  .hero-stat-lbl{font-size:0.58rem}
+  
+  .stat-num{font-size:2.2rem}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  
+  .project-card{padding:var(--space-md)}
+  .agency-card{padding:var(--space-md);flex-direction:column;align-items:flex-start}
+  .agency-arrow{align-self:flex-end;margin-top:-30px}
+  
+  .contact-form{padding:var(--space-md)}
 }
 
 /* Desktop drawer never leaks on large screens */
