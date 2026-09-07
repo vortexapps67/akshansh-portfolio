@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroOrbGyro();
   initCardBeams();
   initScrollBlurEngine();
+  initInteractiveLinesBackground();
 });
 
 /* Cursor Spotlight Glow */
@@ -1132,7 +1133,154 @@ function initScrollBlurEngine() {
   }
 }
 
+/* ==========================================================================
+   11h. Framer Interaction Lines Background Engine (Karim Saif Algorithm)
+   ========================================================================== */
+function initInteractiveLinesBackground() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  const canvas = document.getElementById('interaction-lines-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  const vec = (x, y) => ({ x, y });
+  const vecAdd = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
+  const vecSub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y });
+  const vecMult = (a, s) => ({ x: a.x * s, y: a.y * s });
+  const vecLerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
+  const map = (v, a, b, c, d) => ((v - a) / (b - a)) * (d - c) + c;
+
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+
+  const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+  const cfg = { linesNum: 36, bias: 0.5 };
+  let lastActivity = Date.now();
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  mouse.x = width / 2;
+  mouse.y = height / 2;
+  mouse.targetX = width / 2;
+  mouse.targetY = height / 2;
+
+  window.addEventListener('mousemove', (e) => {
+    lastActivity = Date.now();
+    mouse.targetX = e.clientX;
+    mouse.targetY = e.clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      lastActivity = Date.now();
+      mouse.targetX = e.touches[0].clientX;
+      mouse.targetY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  const minLines = 8;
+  const maxLines = 40;
+  const curveStrength = 1.15;
+  const segments = 45;
+
+  let animId = 0;
+
+  function render(time) {
+    const now = Date.now();
+    const isIdle = (now - lastActivity) / 1000 > 2.0;
+
+    if (isIdle) {
+      const t = time * 0.0008;
+      mouse.targetX = width / 2 + Math.sin(t * 0.8) * width * 0.32;
+      mouse.targetY = height / 2 + Math.cos(t * 0.5) * height * 0.32;
+    }
+
+    mouse.x += (mouse.targetX - mouse.x) * 0.05;
+    mouse.y += (mouse.targetY - mouse.y) * 0.07;
+
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.save();
+    
+    // Dynamic theme-aware line color with high-end specular glow
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.strokeStyle = isLight ? 'rgba(0, 60, 110, 0.08)' : 'rgba(110, 220, 255, 0.11)';
+    ctx.lineWidth = 1;
+
+    const effW = width;
+    const effH = height;
+    ctx.translate(width / 2, height / 2);
+
+    const isSmall = effW < 500;
+    const u = isSmall ? 0.8 * effH : 0;
+    const dFactor = (isSmall ? 1.5 : 0.7) * curveStrength;
+
+    // Vertical line direction
+    const c = vec(effW, -(1.1 * effH) + u);
+    const f = vec(0, 2 * effH);
+    const g = vec(-effW, -effH + u);
+
+    const h = clamp(map(mouse.y, 0, height, minLines, maxLines), minLines, maxLines);
+    cfg.linesNum = lerp(cfg.linesNum, h, 0.08);
+
+    const b = clamp(map(mouse.x, 0, width, 0.6, 0.4), 0.4, 0.6);
+    cfg.bias = lerp(cfg.bias, b, 0.05);
+
+    const linesCount = Math.round(cfg.linesNum);
+
+    for (let t = 0; t < linesCount; t++) {
+      const norm = t / Math.max(1, linesCount - 1);
+      const distributionFactor = 1 - norm * norm; // quadratic distribution
+
+      const lineEnd = vec(
+        lerp(f.x, g.x, distributionFactor),
+        lerp(f.y, g.y, distributionFactor)
+      );
+      const l = vecAdd(vecMult(c, 0.5), vecMult(lineEnd, 0.5));
+      const dispTarget = vecMult(vecAdd(f, l), 0.5);
+
+      const start = c;
+      const end = lineEnd;
+      const target = dispTarget;
+      const biasVal = cfg.bias;
+      const mid = vecLerp(start, end, 0.5);
+      const diff = vecSub(target, mid);
+
+      ctx.beginPath();
+      for (let i = 0; i <= segments; i++) {
+        const segT = i / segments;
+        const basePos = vecLerp(start, end, segT);
+        const weight = 2 * Math.pow(segT, dFactor * (1 - biasVal) * 2) * Math.pow(1 - segT, dFactor * biasVal * 2);
+        const cv = vecAdd(basePos, vecMult(diff, weight));
+
+        if (i === 0) ctx.moveTo(cv.x, cv.y);
+        else ctx.lineTo(cv.x, cv.y);
+      }
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    animId = requestAnimationFrame(render);
+  }
+
+  animId = requestAnimationFrame(render);
+}
 
 function initProjectPreviews() {
   // Dynamically inject modal wrapper structure to prevent HTML bloat
@@ -1313,9 +1461,9 @@ function initBeatwaveTicker() {
   const tickers = document.querySelectorAll('.live-download-val');
   if (tickers.length === 0) return;
 
-  // Set static 2,600+ counter
+  // Set static 4,000+ counter
   tickers.forEach(t => {
-    t.textContent = '2,600+';
+    t.textContent = '4,000+';
   });
 
   // Listen to clicks on download buttons to send a log event to Discord Webhook

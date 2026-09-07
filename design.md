@@ -35,7 +35,7 @@ atmospheric (deep obsidian glass, monochrome typography, luminous ice-cyan auror
 - Mono: JetBrains Mono, weight 500–700 (labels, chips, stats, coordinates)
 - Display tracking: -0.03em; sentence case or crisp title case (no all-caps screaming headers)
 - Hero anchor: clamp(2.8rem, 7.5vw, 5.4rem)
-- Strict ban on em-dashes (`—`) in UI copy: use `:`, `,`, or `|`.
+- Strict ban on em-dashes (\u2014) in UI copy: use `:`, `,`, or `|`.
 
 ## Spacing & Geometry
 - 4-point named scale in `tokens.css` (`--space-3xs` through `--space-3xl`).
@@ -63,5 +63,5 @@ atmospheric (deep obsidian glass, monochrome typography, luminous ice-cyan auror
 ## Verified Metrics
 - 30+ Production Deployments
 - 2 Venture Studios (Zephyr Devs & Vortex Apps)
-- 2,600+ BeatWave APK Downloads
+- 4,000+ BeatWave APK Downloads
 - 100% Ad-Free Open Source

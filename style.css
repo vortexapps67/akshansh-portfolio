@@ -92,6 +92,7 @@ p{text-wrap:pretty}
 /* Section divider shimmer line */
 .section-shimmer-rule{position:relative;width:100%;height:1px;margin:var(--space-2xl) 0;pointer-events:none;background:linear-gradient(90deg,transparent 0%,color-mix(in oklab,var(--accent-2) 40%,transparent) 30%,var(--accent) 50%,color-mix(in oklab,var(--accent-2) 40%,transparent) 70%,transparent 100%);box-shadow:0 0 16px var(--accent-2);opacity:0.4;animation:shimmer-sweep 5s linear infinite;background-size:200% 100%}
 
+#interaction-lines-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.8}
 #canvas-particles{display:none}
 .cursor-spotlight{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklab,var(--accent) 7%,transparent) 0%,transparent 65%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);transition:opacity 0.3s}
 .cursor-follower{display:none}
