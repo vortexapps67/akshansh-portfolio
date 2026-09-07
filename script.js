@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFloatingParticles();
   initHeroOrbGyro();
   initCardBeams();
+  initScrollBlurEngine();
 });
 
 /* Cursor Spotlight Glow */
@@ -1044,7 +1045,7 @@ function initHeroOrbGyro() {
 }
 
 /* ==========================================================================
-   11f. Electric Laser Border Beams for Cards
+   11f. Electric Laser Border Beams and Scanlines for Cards
    ========================================================================== */
 function initCardBeams() {
   const cards = document.querySelectorAll('.project-card, .agency-card');
@@ -1055,8 +1056,71 @@ function initCardBeams() {
       beam.setAttribute('aria-hidden', 'true');
       card.appendChild(beam);
     }
+    if (!card.querySelector('.card-scanline')) {
+      const scanline = document.createElement('div');
+      scanline.className = 'card-scanline';
+      scanline.setAttribute('aria-hidden', 'true');
+      card.appendChild(scanline);
+    }
   });
 }
+
+/* ==========================================================================
+   11g. Scroll-Driven Progressive Blur & Cinema Rack Focus Engine
+   ========================================================================== */
+function initScrollBlurEngine() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const root = document.documentElement;
+  const heroLayout = document.querySelector('.hero-layout');
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        // 1. Dynamic Top Progressive Blur Expansion (64px -> 124px) & Blur Scale
+        const topRatio = Math.min(scrollY / 200, 1);
+        const topHeight = 64 + topRatio * 60;
+        const blurScale = 1 + topRatio * 0.6;
+        root.style.setProperty('--top-blur-h', `${topHeight.toFixed(0)}px`);
+        root.style.setProperty('--blur-scale', blurScale.toFixed(2));
+
+        // 2. Hero Depth-of-Field Rack Focus Blur on Scroll
+        if (heroLayout) {
+          const heroH = heroLayout.offsetHeight || 600;
+          const heroRatio = Math.min(Math.max(scrollY / (heroH * 0.9), 0), 1);
+          if (heroRatio > 0.015) {
+            const blurVal = (heroRatio * 13).toFixed(1);
+            const opacityVal = (1 - heroRatio * 0.68).toFixed(2);
+            const translateY = (scrollY * 0.16).toFixed(1);
+            heroLayout.style.filter = `blur(${blurVal}px)`;
+            heroLayout.style.opacity = opacityVal;
+            heroLayout.style.transform = `translateY(${translateY}px) scale(${(1 - heroRatio * 0.04).toFixed(3)})`;
+          } else {
+            heroLayout.style.filter = '';
+            heroLayout.style.opacity = '';
+            heroLayout.style.transform = '';
+          }
+        }
+
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // 3. HUD Telemetry Ping Randomizer
+  const latencyEl = document.getElementById('hud-latency');
+  if (latencyEl) {
+    setInterval(() => {
+      const ms = Math.floor(Math.random() * 8) + 14;
+      latencyEl.textContent = `LATENCY: ${ms}ms`;
+    }, 3200);
+  }
+}
+
 
 function initProjectPreviews() {
   // Dynamically inject modal wrapper structure to prevent HTML bloat
