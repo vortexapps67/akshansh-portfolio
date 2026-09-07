@@ -1218,7 +1218,7 @@ function initProjectPreviews() {
     'wavemirror': {
       title: 'WaveMirror Movies',
       logo: '<img src="assets/wavemirror.png" alt="WaveMirror">',
-      url: 'https://wavemirrors.netlify.app',
+      url: 'https://wavemirror.vercel.app',
       desc: 'Lightweight media portal querying open APIs with fast search results filters and responsive cards layouts.',
       runtime: 'HTML5 / CSS / Vanilla JS',
       speed: '< 0.5s Loading',
