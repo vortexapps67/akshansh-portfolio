@@ -89,10 +89,8 @@ p{text-wrap:pretty}
 
 .progressive-blur-bottom{position:fixed;bottom:0;left:0;right:0;height:64px;pointer-events:none;z-index:490;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);mask-image:linear-gradient(to top,black 0%,transparent 100%);-webkit-mask-image:linear-gradient(to top,black 0%,transparent 100%)}
 
-/* In-page Progressive Blur Section Ribbon */
-.section-blur-ribbon{position:relative;width:100%;height:84px;margin:var(--space-2xl) 0;pointer-events:none;overflow:hidden;z-index:3}
-.section-blur-ribbon-glass{position:absolute;inset:0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);mask-image:linear-gradient(to bottom,transparent 0%,black 50%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 50%,transparent 100%)}
-.section-blur-ribbon-line{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,color-mix(in oklab,var(--accent-2) 40%,transparent) 30%,var(--accent) 50%,color-mix(in oklab,var(--accent-2) 40%,transparent) 70%,transparent 100%);box-shadow:0 0 16px var(--accent-2);opacity:0.45;animation:shimmer-sweep 5s linear infinite;background-size:200% 100%}
+/* Section divider shimmer line */
+.section-shimmer-rule{position:relative;width:100%;height:1px;margin:var(--space-2xl) 0;pointer-events:none;background:linear-gradient(90deg,transparent 0%,color-mix(in oklab,var(--accent-2) 40%,transparent) 30%,var(--accent) 50%,color-mix(in oklab,var(--accent-2) 40%,transparent) 70%,transparent 100%);box-shadow:0 0 16px var(--accent-2);opacity:0.4;animation:shimmer-sweep 5s linear infinite;background-size:200% 100%}
 
 #canvas-particles{display:none}
 .cursor-spotlight{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklab,var(--accent) 7%,transparent) 0%,transparent 65%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);transition:opacity 0.3s}
@@ -228,7 +226,8 @@ body.light-theme .header-wrapper.scrolled .header-container{background:color-mix
 @keyframes scanline-sweep{0%{top:-4px;opacity:0}15%{opacity:1}85%{opacity:0.9}100%{top:100%;opacity:0}}
 
 /* ============ Hero ============ */
-.hero-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,0.8fr);gap:var(--space-2xl);align-items:center;min-height:calc(100vh - var(--nav-h) - 180px);padding:var(--space-2xl) 0 var(--space-2xl);will-change:filter,opacity,transform;transition:filter 0.1s ease-out,opacity 0.1s ease-out,transform 0.1s ease-out}
+.hero-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,0.8fr);gap:var(--space-2xl);align-items:center;min-height:calc(100vh - var(--nav-h) - 180px);padding:var(--space-2xl) 0 var(--space-2xl)}
+.hero-title,.hero-desc,.section-title-lg,.section-label,.page-title,.page-desc{will-change:filter,opacity;transition:filter 0.08s ease-out,opacity 0.08s ease-out}
 .hero-hud{display:inline-flex;align-items:center;gap:10px;margin-bottom:var(--space-sm);font-family:var(--font-mono);font-size:0.68rem;letter-spacing:var(--tracking-widest);color:var(--ink-3);text-transform:uppercase;font-weight:600}
 .hero-hud-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 8px var(--accent-2);animation:pulse-dot 1.4s var(--ease-in-out) infinite;flex-shrink:0}
 .hero-hud-sep{color:var(--rule);opacity:0.6}

@@ -1066,13 +1066,13 @@ function initCardBeams() {
 }
 
 /* ==========================================================================
-   11g. Scroll-Driven Progressive Blur & Cinema Rack Focus Engine
+   11g. Scroll-Driven Progressive Blur: TEXT ONLY
    ========================================================================== */
 function initScrollBlurEngine() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const root = document.documentElement;
-  const heroLayout = document.querySelector('.hero-layout');
+  const heroTexts = document.querySelectorAll('.hero-title, .hero-desc');
+  const sectionTexts = document.querySelectorAll('.section-title-lg, .section-label, .page-title, .page-desc');
   let ticking = false;
 
   window.addEventListener('scroll', () => {
@@ -1080,30 +1080,41 @@ function initScrollBlurEngine() {
       requestAnimationFrame(() => {
         const scrollY = window.scrollY || window.pageYOffset;
 
-        // 1. Dynamic Top Progressive Blur Expansion (64px -> 124px) & Blur Scale
-        const topRatio = Math.min(scrollY / 200, 1);
-        const topHeight = 64 + topRatio * 60;
-        const blurScale = 1 + topRatio * 0.6;
-        root.style.setProperty('--top-blur-h', `${topHeight.toFixed(0)}px`);
-        root.style.setProperty('--blur-scale', blurScale.toFixed(2));
-
-        // 2. Hero Depth-of-Field Rack Focus Blur on Scroll
-        if (heroLayout) {
-          const heroH = heroLayout.offsetHeight || 600;
-          const heroRatio = Math.min(Math.max(scrollY / (heroH * 0.9), 0), 1);
-          if (heroRatio > 0.015) {
-            const blurVal = (heroRatio * 13).toFixed(1);
-            const opacityVal = (1 - heroRatio * 0.68).toFixed(2);
-            const translateY = (scrollY * 0.16).toFixed(1);
-            heroLayout.style.filter = `blur(${blurVal}px)`;
-            heroLayout.style.opacity = opacityVal;
-            heroLayout.style.transform = `translateY(${translateY}px) scale(${(1 - heroRatio * 0.04).toFixed(3)})`;
+        // 1. Hero Text Progressive Blur on Scroll (ONLY text elements)
+        // Does NOT blur the orb, logo, buttons, cards, or badge
+        if (heroTexts.length) {
+          const heroH = 480;
+          const heroRatio = Math.min(Math.max(scrollY / heroH, 0), 1);
+          if (heroRatio > 0.02) {
+            const blurVal = (heroRatio * 10).toFixed(1);
+            const opacityVal = (1 - heroRatio * 0.7).toFixed(2);
+            heroTexts.forEach(el => {
+              el.style.filter = `blur(${blurVal}px)`;
+              el.style.opacity = opacityVal;
+            });
           } else {
-            heroLayout.style.filter = '';
-            heroLayout.style.opacity = '';
-            heroLayout.style.transform = '';
+            heroTexts.forEach(el => {
+              el.style.filter = '';
+              el.style.opacity = '';
+            });
           }
         }
+
+        // 2. In-Page Section Text Progressive Blur on scroll exit
+        // Applies strictly to text headers and labels
+        sectionTexts.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < 110 && rect.bottom > 0) {
+            const exitRatio = Math.min(Math.max((110 - rect.top) / 110, 0), 1);
+            const textBlur = (exitRatio * 8).toFixed(1);
+            const textOpacity = (1 - exitRatio * 0.65).toFixed(2);
+            el.style.filter = `blur(${textBlur}px)`;
+            el.style.opacity = textOpacity;
+          } else {
+            el.style.filter = '';
+            el.style.opacity = '';
+          }
+        });
 
         ticking = false;
       });
@@ -1120,6 +1131,7 @@ function initScrollBlurEngine() {
     }, 3200);
   }
 }
+
 
 
 function initProjectPreviews() {
