@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initUpiCopy();
   initAuroraParallax();
   initFloatingParticles();
+  initHeroOrbGyro();
+  initCardBeams();
 });
 
 /* Cursor Spotlight Glow */
@@ -990,11 +992,72 @@ function initFloatingParticles() {
   aurora.appendChild(fragment);
 }
 
+/* ==========================================================================
+   11e. 3D Hero Orb Gyroscope on Mouse
+   ========================================================================== */
+function initHeroOrbGyro() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 768) return;
 
+  const hero = document.querySelector('.hero-layout');
+  const orb = document.querySelector('.orb');
+  if (!hero || !orb) return;
+
+  let targetRotX = 0;
+  let targetRotY = 0;
+  let currentRotX = 0;
+  let currentRotY = 0;
+  let isHovered = false;
+
+  hero.addEventListener('mouseenter', () => {
+    isHovered = true;
+  });
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    targetRotX = -y * 22;
+    targetRotY = x * 26;
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    isHovered = false;
+    targetRotX = 0;
+    targetRotY = 0;
+  });
+
+  function gyroLoop() {
+    currentRotX += (targetRotX - currentRotX) * 0.08;
+    currentRotY += (targetRotY - currentRotY) * 0.08;
+
+    if (Math.abs(currentRotX) > 0.02 || Math.abs(currentRotY) > 0.02 || isHovered) {
+      orb.style.transform = `perspective(800px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+    } else {
+      orb.style.transform = '';
+    }
+
+    requestAnimationFrame(gyroLoop);
+  }
+
+  gyroLoop();
+}
 
 /* ==========================================================================
-   13. Project Spec Mockup Modals
+   11f. Electric Laser Border Beams for Cards
    ========================================================================== */
+function initCardBeams() {
+  const cards = document.querySelectorAll('.project-card, .agency-card');
+  cards.forEach(card => {
+    if (!card.querySelector('.card-beam')) {
+      const beam = document.createElement('div');
+      beam.className = 'card-beam';
+      beam.setAttribute('aria-hidden', 'true');
+      card.appendChild(beam);
+    }
+  });
+}
+
 function initProjectPreviews() {
   // Dynamically inject modal wrapper structure to prevent HTML bloat
   const modal = document.createElement('div');
