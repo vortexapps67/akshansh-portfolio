@@ -117,16 +117,16 @@ function initPreloader() {
 
   setTimeout(() => {
     fadeLoaderOut();
-  }, 1000);
+  }, 950);
 
   function fadeLoaderOut() {
-    if (preloader.style.opacity !== '0') {
-      preloader.style.opacity = '0';
+    if (!preloader.classList.contains('hidden')) {
+      preloader.classList.add('hidden');
       setTimeout(() => {
         preloader.style.display = 'none';
         document.body.classList.add('loaded');
         window.dispatchEvent(new Event('scroll'));
-      }, 600);
+      }, 750);
     }
   }
 }
@@ -1070,7 +1070,6 @@ function initInteractiveLinesBackground() {
   window.addEventListener('resize', resize, { passive: true });
 
   const dots = [];
-  const dotColor = document.body.classList.contains('light-theme') ? '120, 60, 200' : '190, 160, 255';
   for (let i = 0; i < 26; i++) {
     dots.push({
       x: Math.random(),
@@ -1099,6 +1098,9 @@ function initInteractiveLinesBackground() {
     lastT = now;
     curT += 0.0016 * dt;
 
+    const isLight = document.body.classList.contains('light-theme') || document.documentElement.getAttribute('data-theme') === 'light';
+    const dotColor = isLight ? '0, 0, 0' : '255, 255, 255';
+
     // Idle: the field drifts on its own so the hero never reads as frozen
     if ((Date.now() - lastActivity) / 1000 > 2) {
       tmx = 0.5 + Math.sin(curT * 0.8) * 0.32;
@@ -1109,8 +1111,8 @@ function initInteractiveLinesBackground() {
 
     ctx.clearRect(0, 0, width, height);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = `rgba(${dotColor}, 0.14)`;
-    ctx.fillStyle = `rgba(${dotColor}, 0.5)`;
+    ctx.strokeStyle = `rgba(${dotColor}, ${isLight ? 0.09 : 0.14})`;
+    ctx.fillStyle = `rgba(${dotColor}, ${isLight ? 0.35 : 0.5})`;
 
     const minLines = 8, maxLines = 36, curveStrength = 1.15, segments = 30;
     const isSmall = width < 500;
