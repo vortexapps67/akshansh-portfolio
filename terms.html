@@ -8,7 +8,11 @@
   <meta name="keywords" content="terms, conditions, Akshansh Sinha, systems engineer">
   <meta name="author" content="Akshansh Sinha">
   <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap">
   <link rel="stylesheet" href="style.css">
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('theme-light');}}catch(e){}</script>
 </head>
 <body>
 
@@ -24,6 +28,12 @@
     <div class="aurora-blob aurora-blob-2"></div>
     <div class="aurora-blob aurora-blob-3"></div>
   </div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <canvas id="interaction-lines-canvas" aria-hidden="true"></canvas>
+  <div class="progressive-blur-top" aria-hidden="true">
+    <div></div><div></div><div></div><div></div><div></div><div></div>
+  </div>
+  <div class="progressive-blur-bottom" aria-hidden="true"></div>
   <div class="cursor-spotlight" id="cursor-spotlight"></div>
   <div class="cursor-follower" id="cursor-follower"></div>
   <div class="page-transition-overlay" id="page-transition-overlay"></div>
@@ -125,6 +135,13 @@
       <div>&copy; 2026 Akshansh Sinha. Patna, India.</div>
     </div>
   </footer>
+
+  <div class="footer-statement reveal" aria-hidden="true">
+    <span class="footer-statement-name">
+      <span class="fsn-layer fsn-base">AKSHANSH <em>SINHA</em></span>
+      <span class="fsn-layer fsn-sheen">AKSHANSH <em>SINHA</em></span>
+    </span>
+  </div>
 
   <script src="script.js"></script>
 </body>

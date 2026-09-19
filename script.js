@@ -1,40 +1,57 @@
 /* script.js - Interactive Engine for Dual-Theme Portfolio, Webhook & AI Chat Bubble */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Coarse-pointer / mobile devices skip all pointer-driven flourishes, tilt calculations,
+  // particle loops and per-frame canvas renders to preserve 60-120fps scrolling.
+  const coarse = window.matchMedia('(max-width: 900px), (pointer: coarse)').matches ||
+                 /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
   initTheme();
   initPreloader();
-  initCursorSpotlight();
-  initMouseFollower();
-  initScrollReveals();
-  initCardSpotlight();
+  if (!coarse) {
+    initCursorSpotlight();
+    initMouseFollower();
+    initCardSpotlight();
+    initMagneticHover();
+    initButtonRipples();
+    initAuroraParallax();
+    initFloatingParticles();
+    initHeroOrbGyro();
+    initCardBeams();
+    initScrollBlurEngine();
+    initInteractiveLinesBackground();
+  }
+  initScrollReveals(coarse);
   initProjectsFilter();
   initMobileMenu();
   initWebhookContact();
   initChatBubble();
-  initCanvasParticles();
   initPageTransitions();
-  initMagneticHover();
-  initButtonRipples();
   initProjectPreviews();
   initBeatwaveTicker();
-  initScrollProgress();
+  initScrollProgress(coarse);
   initStatCounters();
   initUpiCopy();
-  initAuroraParallax();
-  initFloatingParticles();
-  initHeroOrbGyro();
-  initCardBeams();
-  initScrollBlurEngine();
-  initInteractiveLinesBackground();
+  initHudTelemetry();
 });
 
 /* Cursor Spotlight Glow */
 function initCursorSpotlight() {
   const spotlight = document.getElementById('cursor-spotlight');
   if (!spotlight) return;
+  let queued = false;
+  let px = 0, py = 0;
+
   window.addEventListener('mousemove', (e) => {
-    spotlight.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-  });
+    px = e.clientX;
+    py = e.clientY;
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      spotlight.style.transform = `translate3d(${px}px, ${py}px, 0) translate(-50%, -50%)`;
+      queued = false;
+    });
+  }, { passive: true });
 }
 
 /* ==========================================================================
@@ -47,23 +64,26 @@ function initTheme() {
   if (currentTheme === 'light') {
     document.body.classList.add('light-theme');
     document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.classList.add('theme-light');
     updateToggleIcons('light');
   } else {
     document.body.classList.remove('light-theme');
     document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.classList.remove('theme-light');
     updateToggleIcons('dark');
   }
 
   themeToggleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
-      
+
       let theme = 'dark';
       if (document.body.classList.contains('light-theme')) {
         theme = 'light';
       }
-      
+
       document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.toggle('theme-light', theme === 'light');
       localStorage.setItem('theme', theme);
       updateToggleIcons(theme);
     });
@@ -139,12 +159,11 @@ function initMouseFollower() {
     if (mouseActive) {
       const dx = targetX - followerX;
       const dy = targetY - followerY;
-      
+
       followerX += dx * 0.15;
       followerY += dy * 0.15;
-      
-      follower.style.left = `${followerX}px`;
-      follower.style.top = `${followerY}px`;
+
+      follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0)`;
     }
     requestAnimationFrame(smoothFollow);
   }
@@ -170,7 +189,7 @@ function initMouseFollower() {
 /* ==========================================================================
    4. Scroll Reveal Observer & Stagger Engine
    ========================================================================== */
-function initScrollReveals() {
+function initScrollReveals(coarse) {
   const reveals = document.querySelectorAll('.reveal, .reveal-up, .reveal-blur, .reveal-scale, .reveal-left, .stagger-group');
   if (reveals.length === 0) return;
 
@@ -188,8 +207,8 @@ function initScrollReveals() {
       }
     });
   }, {
-    threshold: 0.06,
-    rootMargin: '0px 0px -40px 0px'
+    threshold: coarse ? 0.01 : 0.06,
+    rootMargin: coarse ? '0px 0px 80px 0px' : '0px 0px -40px 0px'
   });
 
   reveals.forEach(elem => {
@@ -200,7 +219,7 @@ function initScrollReveals() {
   function checkViewportVisibility() {
     reveals.forEach(elem => {
       const rect = elem.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.94) {
+      if (rect.top < window.innerHeight * (coarse ? 1.05 : 0.94)) {
         elem.classList.add('visible');
         observer.unobserve(elem);
       }
@@ -223,9 +242,14 @@ function initCardSpotlight() {
 
   cards.forEach(card => {
     const enableTilt = !isReducedMotion && !isMobile && (card.classList.contains('project-card') || card.classList.contains('agency-card'));
+    let cardRect = null;
+
+    card.addEventListener('pointerenter', () => {
+      cardRect = card.getBoundingClientRect();
+    });
 
     card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
+      const rect = cardRect || (cardRect = card.getBoundingClientRect());
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       card.style.setProperty('--mouse-x', `${x}px`);
@@ -240,9 +264,10 @@ function initCardSpotlight() {
         const tiltY = (normX * 3.5).toFixed(2);
         card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px) scale(1.01)`;
       }
-    });
+    }, { passive: true });
 
     card.addEventListener('mouseleave', () => {
+      cardRect = null;
       if (enableTilt) {
         card.style.transform = '';
       }
@@ -640,145 +665,6 @@ function initChatBubble() {
 }
 
 /* ==========================================================================
-   9. Live Interactive Canvas Background (Particle Network)
-   ========================================================================== */
-function initCanvasParticles() {
-  const canvas = document.getElementById('canvas-particles');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  let mouse = { x: null, y: null, radius: 120 };
-
-  let particleColor = 'rgba(52, 211, 153, 0.3)';
-  let lineR = 52, lineG = 211, lineB = 153;
-
-  function updateColors() {
-    const isLight = document.body.classList.contains('light-theme');
-    if (isLight) {
-      particleColor = 'rgba(13, 148, 136, 0.25)';
-      lineR = 13; lineG = 148; lineB = 136;
-    } else {
-      particleColor = 'rgba(52, 211, 153, 0.3)';
-      lineR = 52; lineG = 211; lineB = 153;
-    }
-  }
-  updateColors();
-
-  const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
-  themeToggleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setTimeout(updateColors, 50);
-    });
-  });
-
-  window.addEventListener('resize', resizeCanvas);
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    initParticles();
-  }
-
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  window.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-
-  class Particle {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
-      this.size = Math.random() * 2 + 1.2;
-      this.vx = (Math.random() - 0.5) * 0.4;
-      this.vy = (Math.random() - 0.5) * 0.4;
-    }
-
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = particleColor;
-      ctx.fill();
-    }
-
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-
-      if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-      if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
-
-      if (mouse.x !== null && mouse.y !== null) {
-        let dx = mouse.x - this.x;
-        let dy = mouse.y - this.y;
-        let dist = Math.hypot(dx, dy);
-
-        if (dist < mouse.radius) {
-          let force = (mouse.radius - dist) / mouse.radius;
-          let rx = dx / dist;
-          let ry = dy / dist;
-
-          this.x -= rx * force * 1.5;
-          this.y -= ry * force * 1.5;
-        }
-      }
-    }
-  }
-
-  function initParticles() {
-    particles = [];
-    const area = (canvas.width * canvas.height) / 13000;
-    const count = Math.min(Math.max(area, 40), 120);
-
-    for (let i = 0; i < count; i++) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height;
-      particles.push(new Particle(x, y));
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-    }
-    
-    connectParticles();
-    requestAnimationFrame(animate);
-  }
-
-  function connectParticles() {
-    const maxDist = 110;
-    for (let a = 0; a < particles.length; a++) {
-      for (let b = a + 1; b < particles.length; b++) {
-        let dx = particles[a].x - particles[b].x;
-        let dy = particles[a].y - particles[b].y;
-        let dist = Math.hypot(dx, dy);
-
-        if (dist < maxDist) {
-          let alpha = (1 - dist / maxDist) * 0.35;
-          ctx.beginPath();
-          ctx.moveTo(particles[a].x, particles[a].y);
-          ctx.lineTo(particles[b].x, particles[b].y);
-          ctx.strokeStyle = `rgba(${lineR}, ${lineG}, ${lineB}, ${alpha})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
-      }
-    }
-  }
-
-  resizeCanvas();
-  animate();
-}
-
-/* ==========================================================================
    10. Page-Fade Transitions
    ========================================================================== */
 function initPageTransitions() {
@@ -1122,19 +1008,25 @@ function initScrollBlurEngine() {
       ticking = true;
     }
   }, { passive: true });
-
-  // 3. HUD Telemetry Ping Randomizer
-  const latencyEl = document.getElementById('hud-latency');
-  if (latencyEl) {
-    setInterval(() => {
-      const ms = Math.floor(Math.random() * 8) + 14;
-      latencyEl.textContent = `LATENCY: ${ms}ms`;
-    }, 3200);
-  }
 }
 
 /* ==========================================================================
-   11h. Framer Interaction Lines Background Engine (Karim Saif Algorithm)
+   11g-ii. HUD Telemetry Ping Randomizer (cheap: one text write every 3.2s)
+   ========================================================================== */
+function initHudTelemetry() {
+  const latencyEl = document.getElementById('hud-latency');
+  if (!latencyEl) return;
+
+  setInterval(() => {
+    const ms = Math.floor(Math.random() * 8) + 14;
+    latencyEl.textContent = `LATENCY: ${ms}ms`;
+  }, 3200);
+}
+
+/* ==========================================================================
+   11h. Interactive Lines Background Engine
+   One 2D canvas, flat maths, no per-frame object allocation. Only the
+   line/field geometry and a handful of motes are drawn.
    ========================================================================== */
 function initInteractiveLinesBackground() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1145,141 +1037,147 @@ function initInteractiveLinesBackground() {
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
 
-  const vec = (x, y) => ({ x, y });
-  const vecAdd = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
-  const vecSub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y });
-  const vecMult = (a, s) => ({ x: a.x * s, y: a.y * s });
-  const vecLerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const clamp = (v, mn, mx) => Math.max(mn, Math.min(mx, v));
-  const map = (v, a, b, c, d) => ((v - a) / (b - a)) * (d - c) + c;
-
+  // Geometry is cached in locals; the canvas is composited in CSS pixels, so
+  // there is no per-frame matrix or device-pixel scaling to pay for.
   let width = 0;
   let height = 0;
-  let dpr = 1;
-
-  const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
-  const cfg = { linesNum: 36, bias: 0.5 };
-  let lastActivity = Date.now();
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   resize();
   window.addEventListener('resize', resize, { passive: true });
 
-  mouse.x = width / 2;
-  mouse.y = height / 2;
-  mouse.targetX = width / 2;
-  mouse.targetY = height / 2;
+  const dots = [];
+  const dotColor = document.body.classList.contains('light-theme') ? '120, 60, 200' : '190, 160, 255';
+  for (let i = 0; i < 26; i++) {
+    dots.push({
+      x: Math.random(),
+      y: Math.random(),
+      vx: (Math.random() - 0.5) * 0.00045,
+      vy: (Math.random() - 0.5) * 0.00045,
+      r: Math.random() * 1.5 + 0.9,
+      a: Math.random() * 0.32 + 0.1
+    });
+  }
 
+  let mx = 0.5, my = 0.5, tmx = 0.5, tmy = 0.5;
+  let curT = 0, lastT = performance.now();
+  let lastActivity = Date.now();
+
+  // The field follows the pointer when there is one. On touch devices the
+  // canvas is not started at all (see the module gate in the bootstrap).
   window.addEventListener('mousemove', (e) => {
     lastActivity = Date.now();
-    mouse.targetX = e.clientX;
-    mouse.targetY = e.clientY;
+    tmx = e.clientX / window.innerWidth;
+    tmy = e.clientY / window.innerHeight;
   }, { passive: true });
 
-  window.addEventListener('touchmove', (e) => {
-    if (e.touches && e.touches[0]) {
-      lastActivity = Date.now();
-      mouse.targetX = e.touches[0].clientX;
-      mouse.targetY = e.touches[0].clientY;
+  function frame(now) {
+    const dt = Math.min((now - lastT) / 16.667, 4); // frames elapsed, capped
+    lastT = now;
+    curT += 0.0016 * dt;
+
+    // Idle: the field drifts on its own so the hero never reads as frozen
+    if ((Date.now() - lastActivity) / 1000 > 2) {
+      tmx = 0.5 + Math.sin(curT * 0.8) * 0.32;
+      tmy = 0.5 + Math.cos(curT * 0.5) * 0.32;
     }
-  }, { passive: true });
-
-  const minLines = 8;
-  const maxLines = 40;
-  const curveStrength = 1.15;
-  const segments = 45;
-
-  let animId = 0;
-
-  function render(time) {
-    const now = Date.now();
-    const isIdle = (now - lastActivity) / 1000 > 2.0;
-
-    if (isIdle) {
-      const t = time * 0.0008;
-      mouse.targetX = width / 2 + Math.sin(t * 0.8) * width * 0.32;
-      mouse.targetY = height / 2 + Math.cos(t * 0.5) * height * 0.32;
-    }
-
-    mouse.x += (mouse.targetX - mouse.x) * 0.05;
-    mouse.y += (mouse.targetY - mouse.y) * 0.07;
+    mx += (tmx - mx) * 0.06 * dt;
+    my += (tmy - my) * 0.06 * dt;
 
     ctx.clearRect(0, 0, width, height);
-
-    ctx.save();
-    
-    // Dynamic theme-aware line color with high-end specular glow
-    const isLight = document.body.classList.contains('light-theme');
-    ctx.strokeStyle = isLight ? 'rgba(0, 60, 110, 0.08)' : 'rgba(110, 220, 255, 0.11)';
     ctx.lineWidth = 1;
+    ctx.strokeStyle = `rgba(${dotColor}, 0.14)`;
+    ctx.fillStyle = `rgba(${dotColor}, 0.5)`;
 
-    const effW = width;
-    const effH = height;
-    ctx.translate(width / 2, height / 2);
-
-    const isSmall = effW < 500;
-    const u = isSmall ? 0.8 * effH : 0;
+    const minLines = 8, maxLines = 36, curveStrength = 1.15, segments = 30;
+    const isSmall = width < 500;
+    const u = isSmall ? 0.8 * height : 0;
     const dFactor = (isSmall ? 1.5 : 0.7) * curveStrength;
 
-    // Vertical line direction
-    const c = vec(effW, -(1.1 * effH) + u);
-    const f = vec(0, 2 * effH);
-    const g = vec(-effW, -effH + u);
+    const cX = width, cY = -(1.1 * height) + u;
+    const fX = 0, fY = 2 * height;
+    const gX = -width, gY = -height + u;
 
-    const h = clamp(map(mouse.y, 0, height, minLines, maxLines), minLines, maxLines);
-    cfg.linesNum = lerp(cfg.linesNum, h, 0.08);
-
-    const b = clamp(map(mouse.x, 0, width, 0.6, 0.4), 0.4, 0.6);
-    cfg.bias = lerp(cfg.bias, b, 0.05);
-
-    const linesCount = Math.round(cfg.linesNum);
+    const linesCount = Math.round(minLines + (my * (maxLines - minLines)));
+    const bias = 0.6 + (mx * (0.4 - 0.6));
 
     for (let t = 0; t < linesCount; t++) {
       const norm = t / Math.max(1, linesCount - 1);
-      const distributionFactor = 1 - norm * norm; // quadratic distribution
+      const df = 1 - norm * norm;
 
-      const lineEnd = vec(
-        lerp(f.x, g.x, distributionFactor),
-        lerp(f.y, g.y, distributionFactor)
-      );
-      const l = vecAdd(vecMult(c, 0.5), vecMult(lineEnd, 0.5));
-      const dispTarget = vecMult(vecAdd(f, l), 0.5);
+      const eX = fX + (gX - fX) * df;
+      const eY = fY + (gY - fY) * df;
+      const lX = (cX + eX) * 0.5;
+      const lY = (cY + eY) * 0.5;
+      const tgX = (fX + lX) * 0.5;
+      const tgY = (fY + lY) * 0.5;
 
-      const start = c;
-      const end = lineEnd;
-      const target = dispTarget;
-      const biasVal = cfg.bias;
-      const mid = vecLerp(start, end, 0.5);
-      const diff = vecSub(target, mid);
+      const midX = (cX + eX) * 0.5;
+      const midY = (cY + eY) * 0.5;
+      const diffX = tgX - midX;
+      const diffY = tgY - midY;
+      const kA = dFactor * (1 - bias) * 2;
+      const kB = dFactor * bias * 2;
 
       ctx.beginPath();
       for (let i = 0; i <= segments; i++) {
         const segT = i / segments;
-        const basePos = vecLerp(start, end, segT);
-        const weight = 2 * Math.pow(segT, dFactor * (1 - biasVal) * 2) * Math.pow(1 - segT, dFactor * biasVal * 2);
-        const cv = vecAdd(basePos, vecMult(diff, weight));
-
-        if (i === 0) ctx.moveTo(cv.x, cv.y);
-        else ctx.lineTo(cv.x, cv.y);
+        const w = 2 * Math.pow(segT, kA) * Math.pow(1 - segT, kB);
+        const px = cX + (eX - cX) * segT + diffX * w;
+        const py = cY + (eY - cY) * segT + diffY * w;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
       }
       ctx.stroke();
     }
 
-    ctx.restore();
+    // Depth motes drifting over the lines
+    for (let i = 0; i < dots.length; i++) {
+      const d = dots[i];
+      d.x += d.vx * dt * 16;
+      d.y += d.vy * dt * 16;
+      if (d.x < 0) d.x += 1; else if (d.x > 1) d.x -= 1;
+      if (d.y < 0) d.y += 1; else if (d.y > 1) d.y -= 1;
+      ctx.globalAlpha = d.a;
+      ctx.beginPath();
+      ctx.arc(d.x * width, d.y * height, d.r, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
 
-    animId = requestAnimationFrame(render);
+    if (running) animId = requestAnimationFrame(frame);
   }
 
-  animId = requestAnimationFrame(render);
+  let animId = 0;
+  let running = false;
+
+  function start() {
+    if (running) return;
+    running = true;
+    lastT = performance.now();
+    animId = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    running = false;
+    cancelAnimationFrame(animId);
+  }
+
+  // The canvas is fixed to the viewport, so the only time it can be off-screen
+  // is when the tab itself is hidden: no frames are burned in the background.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  start();
 }
 
 function initProjectPreviews() {
@@ -1513,19 +1411,25 @@ function initBeatwaveTicker() {
 /* ==========================================================================
    15. Scroll Progress Bar & Dynamic Header Elevation
    ========================================================================== */
-function initScrollProgress() {
+function initScrollProgress(coarse) {
   const progressBar = document.getElementById('scroll-progress-bar');
   const headerWrapper = document.querySelector('.header-wrapper');
+  const bottomBlur = coarse ? null : document.querySelector('.progressive-blur-bottom');
+  const root = document.documentElement;
 
   let ticking = false;
+  let lastScrim = -1;
 
   function updateScroll() {
+    ticking = false;
     const scrollY = window.scrollY || window.pageYOffset;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
 
     if (progressBar) {
-      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      // One custom property drives both the fill's scaleX and the tip dot's
+      // position, so the whole bar costs a single style write per frame.
+      progressBar.style.setProperty('--sp', Math.min(1, Math.max(0, progress / 100)).toFixed(4));
     }
 
     if (headerWrapper) {
@@ -1536,7 +1440,21 @@ function initScrollProgress() {
       }
     }
 
-    ticking = false;
+    // Drive the top scrim on desktop only: setting a custom property on :root
+    // invalidates style for the whole tree, which causes frame drops on mobile.
+    if (!coarse) {
+      const scrim = (Math.min(Math.max(scrollY / 200, 0), 1) * 0.8).toFixed(2);
+      if (scrim !== lastScrim) {
+        root.style.setProperty('--top-scrim', scrim);
+        lastScrim = scrim;
+      }
+    }
+
+    // The bottom blur dissolves content into the footer on desktop.
+    if (bottomBlur) {
+      const nearEnd = docHeight > 0 && scrollY > docHeight - 120;
+      bottomBlur.classList.toggle('is-on', scrollY > 40 && !nearEnd);
+    }
   }
 
   window.addEventListener('scroll', () => {

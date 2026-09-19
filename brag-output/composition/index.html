@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+  <title>AKSHANSH.dev : Launch Video</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d0d12;
+      color: #f8fafc;
+      font-family: 'Manrope', sans-serif;
+      overflow: hidden;
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #0d0d12;
+    }
+
+    /* Ambient Aurora & Waves */
+    .bg-canvas-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .aurora-glow-1 {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(13, 13, 18, 0) 70%);
+      top: -150px;
+      left: 100px;
+      filter: blur(60px);
+    }
+
+    .aurora-glow-2 {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.14) 0%, rgba(13, 13, 18, 0) 70%);
+      bottom: -100px;
+      right: 150px;
+      filter: blur(60px);
+    }
+
+    .grid-mesh {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.7;
+    }
+
+    .border-frame {
+      position: absolute;
+      inset: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .frame-corner {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: #38bdf8;
+      border-style: solid;
+    }
+    .fc-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-top-left-radius: 24px; }
+    .fc-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-top-right-radius: 24px; }
+    .fc-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-bottom-left-radius: 24px; }
+    .fc-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-bottom-right-radius: 24px; }
+
+    /* Scene Containers */
+    .scene {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      padding: 80px 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Common Typography & Badges */
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: #38bdf8;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-tag::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 12px #38bdf8;
+    }
+
+    .hud-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      padding: 10px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      color: #cbd5e1;
+      backdrop-filter: blur(12px);
+      width: fit-content;
+      margin-bottom: 32px;
+    }
+
+    .hud-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+    }
+
+    .hud-accent {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* SCENE 1: HERO */
+    #scene-1 {
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 88px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #f8fafc;
+      margin-bottom: 28px;
+      max-width: 1400px;
+    }
+
+    .hero-title .grad-cyan {
+      background: linear-gradient(135deg, #38bdf8 0%, #00e5ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
+    }
+
+    .hero-sub {
+      font-size: 26px;
+      font-weight: 500;
+      color: #94a3b8;
+      max-width: 1100px;
+      line-height: 1.5;
+      margin-bottom: 40px;
+    }
+
+    .hero-badges-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .hero-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 600;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-pill-num {
+      color: #38bdf8;
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    /* SCENE 2: STUDIOS */
+    #scene-2 {
+      justify-content: center;
+    }
+
+    .studios-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .studio-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 44px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .studio-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+    }
+
+    .studio-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .studio-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #1e1e24;
+    }
+
+    .studio-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .studio-role {
+      font-size: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .studio-desc {
+      font-size: 22px;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tech-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      color: #f8fafc;
+    }
+
+    /* SCENE 3: FLAGSHIP PRODUCTS & METRICS */
+    #scene-3 {
+      justify-content: center;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 28px;
+      width: 100%;
+      margin-bottom: 36px;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .product-card.featured {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.04);
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.1);
+    }
+
+    .product-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .product-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #18181f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .product-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .product-desc {
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #4ade80;
+    }
+
+    .live-badge.cyan {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+    }
+
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .metric-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 4px;
+    }
+
+    .metric-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* SCENE 4: OUTRO */
+    #scene-4 {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .outro-orb-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .outro-ring-1 {
+      position: absolute;
+      inset: -16px;
+      border: 2px dashed rgba(56, 189, 248, 0.5);
+      border-radius: 50%;
+    }
+
+    .outro-ring-2 {
+      position: absolute;
+      inset: -32px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 50%;
+    }
+
+    .outro-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.4);
+      background: #18181f;
+    }
+
+    .outro-brand {
+      font-family: 'Syne', sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #f8fafc;
+      margin-bottom: 16px;
+    }
+
+    .outro-brand span {
+      color: #38bdf8;
+    }
+
+    .outro-headline {
+      font-size: 32px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 28px;
+    }
+
+    .outro-meta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="root" data-composition-id="root" data-width="1920" data-height="1080" data-duration="20">
+
+    <!-- Ambient Visual Elements -->
+    <div class="bg-canvas-container">
+      <div class="aurora-glow-1" id="glow-1"></div>
+      <div class="aurora-glow-2" id="glow-2"></div>
+      <div class="grid-mesh"></div>
+    </div>
+
+    <!-- Frame Border -->
+    <div class="border-frame">
+      <div class="frame-corner fc-tl"></div>
+      <div class="frame-corner fc-tr"></div>
+      <div class="frame-corner fc-bl"></div>
+      <div class="frame-corner fc-br"></div>
+    </div>
+
+    <!-- AUDIO LAYER -->
+    <audio id="bg-music" data-start="0" data-duration="20" data-track-index="10" data-volume="0.35" src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3"></audio>
+    <audio id="sfx-switch" data-start="0.3" data-duration="0.3" data-track-index="11" data-volume="0.75" src="assets/sfx/interface/switch_001.ogg"></audio>
+    <audio id="sfx-reveal" data-start="5.2" data-duration="0.2" data-track-index="12" data-volume="0.75" src="assets/sfx/impact/impactSoft_medium_000.ogg"></audio>
+    <audio id="sfx-counter" data-start="10.4" data-duration="0.3" data-track-index="13" data-volume="0.80" src="assets/sfx/casino/chips-collide-1.ogg"></audio>
+    <audio id="sfx-bell" data-start="16.0" data-duration="1.5" data-track-index="14" data-volume="0.85" src="assets/sfx/impact/impactBell_heavy_000.ogg"></audio>
+
+    <!-- SCENE 1: TELEMETRY & HERO (0.0s - 5.0s) -->
+    <div class="scene clip" id="scene-1" data-start="0" data-duration="5">
+      <div class="hud-bar" id="s1-hud">
+        <span class="hud-dot"></span>
+        <span>NODE: PATNA_IN [25.59°N, 85.14°E]</span>
+        <span>/</span>
+        <span class="hud-accent">LATENCY: 18ms</span>
+      </div>
+      <h1 class="hero-title" id="s1-title">
+        Building the <span class="grad-cyan">web</span><br>that moves.
+      </h1>
+      <p class="hero-sub" id="s1-sub">
+        Akshansh Sinha : Full-Stack Systems Engineer &amp; Tech Founder.<br>
+        Engineering reactive web systems, Kotlin microservices &amp; AI orchestration.
+      </p>
+      <div class="hero-badges-row" id="s1-pills">
+        <div class="hero-pill">
+          <span class="hero-pill-num">4,000+</span> Downloads
+        </div>
+        <div class="hero-pill">
+          <span class="hero-pill-num">30+</span> Production Deploys
+        </div>
+        <div class="hero-pill">
+          <span class="hero-pill-num">2</span> Studios
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 2: DUAL STUDIOS (5.0s - 10.0s) -->
+    <div class="scene clip" id="scene-2" data-start="5" data-duration="5">
+      <div class="section-tag" id="s2-tag">01 // Founded Studios &amp; Systems</div>
+      <div class="studios-container">
+        <!-- Zephyr Devs -->
+        <div class="studio-card" id="s2-card-1">
+          <div>
+            <div class="studio-header">
+              <img src="assets/img/zephyrlogo.jpg" alt="Zephyr Devs" class="studio-logo">
+              <div>
+                <div class="studio-name">Zephyr Devs</div>
+                <div class="studio-role">Bespoke Design &amp; Architecture</div>
+              </div>
+            </div>
+            <p class="studio-desc">
+              High-performance web architecture, custom interactive user experiences, and production deployments.
+            </p>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">React</span>
+            <span class="tech-pill">Tailwind CSS</span>
+            <span class="tech-pill">Node.js</span>
+            <span class="tech-pill">WebSockets</span>
+          </div>
+        </div>
+
+        <!-- Vortex Apps -->
+        <div class="studio-card" id="s2-card-2">
+          <div>
+            <div class="studio-header">
+              <img src="assets/img/vortexapps.png" alt="Vortex Apps" class="studio-logo">
+              <div>
+                <div class="studio-name">Vortex Apps</div>
+                <div class="studio-role">High-Fidelity Audio Platforms</div>
+              </div>
+            </div>
+            <p class="studio-desc">
+              Next-generation streaming platforms, Kotlin backend microservices, and AI-accelerated tooling.
+            </p>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">Kotlin Backend</span>
+            <span class="tech-pill">Firebase</span>
+            <span class="tech-pill">Claude AI</span>
+            <span class="tech-pill">Gemini</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 3: FLAGSHIP PRODUCTS & METRICS (10.0s - 15.5s) -->
+    <div class="scene clip" id="scene-3" data-start="10" data-duration="5.5">
+      <div class="section-tag" id="s3-tag">02 // Selected Work &amp; Verified Scale</div>
+      <div class="products-grid">
+        <!-- BeatWave -->
+        <div class="product-card featured" id="s3-prod-1">
+          <div>
+            <div class="product-top">
+              <img src="assets/img/beatwavepng.png" alt="BeatWave" class="product-icon">
+              <div>
+                <div class="product-title">BeatWave</div>
+                <span class="live-badge">Vortex Apps</span>
+              </div>
+            </div>
+            <p class="product-desc">
+              Ad-free high-fidelity audio platform with seamless background playback &amp; native APK distribution.
+            </p>
+          </div>
+          <div class="live-badge cyan" id="s3-bw-counter">
+            ● 4,000+ Active Downloads
+          </div>
+        </div>
+
+        <!-- WaveMirror -->
+        <div class="product-card" id="s3-prod-2">
+          <div>
+            <div class="product-top">
+              <img src="assets/img/wavemirror.png" alt="WaveMirror" class="product-icon">
+              <div>
+                <div class="product-title">WaveMirror</div>
+                <span class="live-badge">Cinema UI</span>
+              </div>
+            </div>
+            <p class="product-desc">
+              Lightweight movies application with lightning search queries &amp; dynamic showcase catalog.
+            </p>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">HTML5 / JS</span>
+            <span class="tech-pill">Media Engine</span>
+          </div>
+        </div>
+
+        <!-- Onyx Chat -->
+        <div class="product-card" id="s3-prod-3">
+          <div>
+            <div class="product-top">
+              <img src="assets/img/onyx logo.png" alt="Onyx Chat" class="product-icon">
+              <div>
+                <div class="product-title">Onyx Chat</div>
+                <span class="live-badge">Messaging</span>
+              </div>
+            </div>
+            <p class="product-desc">
+              Real-time messaging hub prioritizing sub-millisecond WebSocket delivery &amp; clean layout.
+            </p>
+          </div>
+          <div class="tech-pills">
+            <span class="tech-pill">Full-Stack</span>
+            <span class="tech-pill">WebSockets</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Metrics Bar -->
+      <div class="metrics-bar" id="s3-metrics">
+        <div class="metric-box">
+          <div class="metric-val">99.9%</div>
+          <div class="metric-lbl">Hosting Uptime</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">&lt;0.6s</div>
+          <div class="metric-lbl">Avg Load Speed</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">30+</div>
+          <div class="metric-lbl">Production Deploys</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">150%+</div>
+          <div class="metric-lbl">Client Traffic Growth</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 4: OUTRO (15.5s - 20.0s) -->
+    <div class="scene clip" id="scene-4" data-start="15.5" data-duration="4.5">
+      <div class="outro-orb-wrap" id="s4-orb">
+        <div class="outro-ring-1" id="s4-ring-1"></div>
+        <div class="outro-ring-2" id="s4-ring-2"></div>
+        <img src="assets/img/logo.png" alt="Akshansh" class="outro-avatar">
+      </div>
+      <div class="outro-brand" id="s4-brand">AKSHANSH<span>.dev</span></div>
+      <div class="outro-headline" id="s4-headline">Let's build something.</div>
+      <div class="outro-meta" id="s4-meta">
+        <span>Patna, India · 25.59°N, 85.14°E</span>
+        <span>•</span>
+        <span style="color:#38bdf8;">Open for Projects &amp; Architecture</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GSAP Animation Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Ambient Aurora breathing
+    tl.to("#glow-1", { scale: 1.25, duration: 10, yoyo: true, repeat: -1, ease: "sine.inOut" }, 0);
+    tl.to("#glow-2", { scale: 1.2, duration: 8, yoyo: true, repeat: -1, ease: "sine.inOut" }, 0);
+
+    // ==========================================
+    // SCENE 1: TELEMETRY & HERO (0.0s - 5.0s)
+    // ==========================================
+    tl.set("#scene-1", { opacity: 1 }, 0);
+    tl.fromTo("#s1-hud", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+    tl.fromTo("#s1-title", { opacity: 0, y: 30, scale: 0.98 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.8);
+    tl.fromTo("#s1-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 1.3);
+    tl.fromTo("#s1-pills", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 1.7);
+    // Exit scene 1
+    tl.to("#scene-1", { opacity: 0, scale: 1.03, duration: 0.45, ease: "power2.in" }, 4.55);
+
+    // ==========================================
+    // SCENE 2: DUAL STUDIOS (5.0s - 10.0s)
+    // ==========================================
+    tl.set("#scene-2", { opacity: 1 }, 5.0);
+    tl.fromTo("#s2-tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 5.1);
+    tl.fromTo("#s2-card-1", { opacity: 0, x: -50, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 5.3);
+    tl.fromTo("#s2-card-2", { opacity: 0, x: 50, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 5.6);
+    // Exit scene 2
+    tl.to("#scene-2", { opacity: 0, scale: 0.97, duration: 0.45, ease: "power2.in" }, 9.55);
+
+    // ==========================================
+    // SCENE 3: PRODUCTS & METRICS (10.0s - 15.5s)
+    // ==========================================
+    tl.set("#scene-3", { opacity: 1 }, 10.0);
+    tl.fromTo("#s3-tag", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 10.1);
+    tl.fromTo("#s3-prod-1", { opacity: 0, y: 30, scale: 0.95 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 10.3);
+    tl.fromTo("#s3-prod-2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 10.6);
+    tl.fromTo("#s3-prod-3", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 10.8);
+    tl.fromTo("#s3-bw-counter", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }, 10.9);
+    tl.fromTo("#s3-metrics", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 11.4);
+    // Exit scene 3
+    tl.to("#scene-3", { opacity: 0, scale: 1.02, duration: 0.45, ease: "power2.in" }, 15.05);
+
+    // ==========================================
+    // SCENE 4: OUTRO (15.5s - 20.0s)
+    // ==========================================
+    tl.set("#scene-4", { opacity: 1 }, 15.5);
+    tl.fromTo("#s4-orb", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.5)" }, 15.7);
+    tl.to("#s4-ring-1", { rotation: 360, duration: 12, repeat: -1, ease: "linear" }, 15.7);
+    tl.to("#s4-ring-2", { rotation: -360, duration: 16, repeat: -1, ease: "linear" }, 15.7);
+    tl.fromTo("#s4-brand", { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 16.2);
+    tl.fromTo("#s4-headline", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 16.6);
+    tl.fromTo("#s4-meta", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 17.0);
+
+    // Register timeline for Hyperframes renderer
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = tl;
+  </script>
+</body>
+</html>

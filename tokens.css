@@ -1,48 +1,54 @@
 /* Hallmark · pre-emit critique: P5 H5 E5 S4 R5 V5 */
-/* Hallmark · macrostructure: Marquee Hero | genre: atmospheric | theme: Monolith Specular | nav: N5 Floating Pill | footer: Ft5 Statement */
+/* Hallmark · macrostructure: Marquee Hero | genre: atmospheric | theme: Iris Monolith | nav: N5 Floating Pill | footer: Ft5 Statement */
 
 :root, [data-theme="dark"] {
-  /* Colour: dark (default). Monochrome: every neutral tinted 285, chroma <= 0.008 */
-  --paper:        oklch(10% 0.008 285);
-  --paper-2:      oklch(13.5% 0.012 285);
-  --card-bg:      oklch(13.5% 0.012 285);
-  --card-bg-elevated: oklch(16% 0.015 285);
+  /* Colour: dark (default). Violet-cast obsidian: every neutral tinted 288 */
+  --paper:        oklch(11% 0.014 288);
+  --paper-2:      oklch(15% 0.018 288);
+  --card-bg:      oklch(15% 0.018 288);
+  --card-bg-elevated: oklch(18% 0.02 288);
 
   /* Ink (Contrast calibrated for WCAG AA compliance > 4.5:1) */
-  --ink:          oklch(97.5% 0.004 285);
-  --ink-2:        oklch(78% 0.006 285);
-  --ink-3:        oklch(62% 0.006 285);
+  --ink:          oklch(97.5% 0.006 288);
+  --ink-2:        oklch(80% 0.008 288);
+  --ink-3:        oklch(64% 0.01 288);
 
-  /* Specular accents */
-  --accent:       oklch(97.5% 0.004 285);
-  --accent-2:     oklch(78% 0.12 215);
-  --accent-ink:   oklch(10% 0.008 285);
-  --focus:        oklch(78% 0.12 215);
+  /* Specular accents: white primary button + iris/champagne brand pair */
+  --accent:       oklch(97.5% 0.004 288);
+  --accent-2:     oklch(74% 0.16 292);
+  --accent-3:     oklch(84% 0.11 62);
+  --accent-ink:   oklch(11% 0.014 288);
+  --focus:        oklch(78% 0.15 292);
 
-  /* Glass recipe: white light held in frosted panes */
-  --glass:        oklch(92% 0.005 285 / 0.05);
-  --glass-strong: oklch(94% 0.004 285 / 0.09);
-  --glass-border: oklch(95% 0.004 285 / 0.13);
-  --glass-border-hover: oklch(95% 0.004 285 / 0.32);
-  --glass-highlight: oklch(98% 0.003 285 / 0.35);
+  /* Glass recipe: violet light held in frosted panes */
+  --glass:        oklch(93% 0.01 288 / 0.055);
+  --glass-strong: oklch(95% 0.008 288 / 0.09);
+  --glass-border: oklch(95% 0.01 288 / 0.14);
+  --glass-border-hover: oklch(95% 0.01 288 / 0.34);
+  --glass-highlight: oklch(98% 0.005 288 / 0.35);
   --blur:         20px;
 
-  /* Aurora: soft white & cyan light blooms */
-  --aurora-1:     oklch(75% 0.005 285 / 0.13);
-  --aurora-2:     oklch(65% 0.005 285 / 0.1);
-  --aurora-3:     oklch(85% 0.005 285 / 0.07);
+  /* Aurora: iris bloom, orchid haze, champagne warmth */
+  --aurora-1:     oklch(62% 0.19 292 / 0.22);
+  --aurora-2:     oklch(70% 0.13 320 / 0.14);
+  --aurora-3:     oklch(80% 0.12 62 / 0.10);
 
-  /* Shadows & veils */
-  --shadow-deep:  oklch(5% 0.005 285 / 0.4);
-  --shadow-light: oklch(30% 0.01 285 / 0.15);
-  --veil:         oklch(5% 0.005 285 / 0.6);
+  /* Shadows & veils, violet-tinted */
+  --shadow-deep:  oklch(6% 0.02 288 / 0.5);
+  --shadow-light: oklch(30% 0.02 288 / 0.15);
+  --veil:         oklch(6% 0.02 288 / 0.62);
 
   /* Hairline rules: the monochrome divider language */
-  --rule:         oklch(97% 0.004 285 / 0.12);
+  --rule:         oklch(97% 0.008 288 / 0.12);
 
-  /* Typography: 2+1 Hallmark Signature Pairing */
-  --font-display: "Syne", "Segoe UI", sans-serif;
-  --font-body:    "Manrope", "Segoe UI", sans-serif;
+  /* Corner vignette: pulls the eye to the centre of the viewport */
+  --vignette:     oklch(9% 0.02 288 / 0.52);
+  /* Dot-mesh overlay: one dot per 42px cell, laid over the aurora */
+  --mesh-dot:     oklch(97% 0.008 288 / 0.05);
+
+  /* Typography: Sora display / Figtree body / JetBrains Mono labels */
+  --font-display: "Sora", "Segoe UI", sans-serif;
+  --font-body:    "Figtree", "Segoe UI", sans-serif;
   --font-mono:    "JetBrains Mono", Consolas, monospace;
 
   /* Spacing (4-pt scale) */
@@ -63,12 +69,12 @@
   --text-lg:  1.22rem;
   --text-xl:  1.55rem;
   --text-2xl: 2.1rem;
-  --text-display-s: clamp(2.1rem, 4.6vw, 3.4rem);
-  --text-display:   clamp(2.8rem, 7.5vw, 5.4rem);
+  --text-display-s: clamp(2rem, 4.4vw, 3.25rem);
+  --text-display:   clamp(2.7rem, 7.2vw, 5.2rem);
 
   /* Tracking (letter-spacing) */
-  --tracking-tighter: -0.04em;
-  --tracking-tight:   -0.025em;
+  --tracking-tighter: -0.045em;
+  --tracking-tight:   -0.028em;
   --tracking-normal:  0em;
   --tracking-wide:    0.06em;
   --tracking-wider:   0.14em;
@@ -91,7 +97,7 @@
 
   /* Luminous text gradients */
   --text-shimmer: linear-gradient(135deg, var(--ink) 0%, color-mix(in oklab, var(--ink) 70%, var(--accent-2)) 100%);
-  --accent-glow: color-mix(in oklab, var(--accent) 30%, transparent);
+  --accent-glow: color-mix(in oklab, var(--accent-2) 30%, transparent);
 
   /* Structured Geometric Radii (Anti-Slop R-08, R-11) */
   --radius-btn:   10px;
@@ -102,37 +108,50 @@
   /* Layout */
   --nav-h: 76px;
   --max-w: 1160px;
+
+  /* Perf switches: flipped by the mobile tier in style.css */
+  --aurora-blur: 90px;
+  --blur-scale: 1;
+  --top-blur-h: 132px;
 }
 
-/* Light variant: ink on paper, the classic luxury print inversion */
-body.light-theme, [data-theme="light"] {
-  --paper:        oklch(97% 0.004 285);
-  --paper-2:      oklch(93% 0.005 285);
-  --card-bg:      oklch(98.5% 0.004 285);
+/* Light variant: ink on paper, the classic luxury print inversion.
+   `html.theme-light` is set by the inline head script before first paint,
+   so the light palette is in force while the body is still parsing. */
+html.theme-light, body.light-theme, [data-theme="light"] {
+  --paper:        oklch(97.5% 0.005 288);
+  --paper-2:      oklch(93.5% 0.008 288);
+  --card-bg:      oklch(99% 0.004 288);
   --card-bg-elevated: oklch(100% 0 0);
 
-  --ink:          oklch(12% 0.008 285);
-  --ink-2:        oklch(30% 0.008 285);
-  --ink-3:        oklch(45% 0.008 285);
+  --ink:          oklch(13% 0.014 288);
+  --ink-2:        oklch(32% 0.014 288);
+  --ink-3:        oklch(47% 0.012 288);
 
-  --accent:       oklch(12% 0.008 285);
-  --accent-2:     oklch(40% 0.008 285);
-  --accent-ink:   oklch(98% 0.004 285);
-  --focus:        oklch(12% 0.008 285);
+  --accent:       oklch(13% 0.014 288);
+  --accent-2:     oklch(42% 0.19 292);
+  --accent-3:     oklch(46% 0.14 50);
+  --accent-ink:   oklch(98.5% 0.004 288);
+  --focus:        oklch(42% 0.19 292);
 
-  --glass:        oklch(99% 0.003 285 / 0.55);
-  --glass-strong: oklch(99% 0.003 285 / 0.72);
-  --glass-border: oklch(99% 0.003 285 / 0.8);
-  --glass-border-hover: oklch(99% 0.003 285 / 1);
-  --glass-highlight: oklch(99% 0.003 285 / 0.9);
+  --glass:        oklch(99% 0.004 288 / 0.55);
+  --glass-strong: oklch(99% 0.004 288 / 0.72);
+  --glass-border: oklch(99% 0.004 288 / 0.8);
+  --glass-border-hover: oklch(99% 0.004 288 / 1);
+  --glass-highlight: oklch(99% 0.004 288 / 0.9);
 
-  --aurora-1:     oklch(70% 0.005 285 / 0.14);
-  --aurora-2:     oklch(60% 0.005 285 / 0.1);
-  --aurora-3:     oklch(80% 0.005 285 / 0.08);
+  --aurora-1:     oklch(70% 0.12 292 / 0.13);
+  --aurora-2:     oklch(74% 0.09 320 / 0.10);
+  --aurora-3:     oklch(82% 0.09 62 / 0.09);
 
-  --shadow-deep:  oklch(30% 0.01 285 / 0.12);
-  --shadow-light: oklch(30% 0.01 285 / 0.15);
-  --veil:         oklch(30% 0.008 285 / 0.35);
+  --shadow-deep:  oklch(30% 0.02 288 / 0.12);
+  --shadow-light: oklch(30% 0.02 288 / 0.15);
+  --veil:         oklch(30% 0.014 288 / 0.35);
 
-  --rule:         oklch(12% 0.008 285 / 0.14);
+  --rule:         oklch(13% 0.014 288 / 0.14);
+
+  /* Inverted: the vignette has to darken the corners on dark paper, and
+     lighten them on light paper, or it just muddies one of the two themes. */
+  --vignette:     oklch(62% 0.03 288 / 0.16);
+  --mesh-dot:     oklch(13% 0.014 288 / 0.05);
 }

@@ -1,0 +1,3 @@
+﻿Building the web that moves. Full-stack systems architecture, Kotlin backends, and AI products from Patna to production.
+
+Explore the work: https://beatlabs.oneapp.dev
