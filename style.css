@@ -286,7 +286,8 @@ body.light-theme .header-wrapper.scrolled .header-container{background:color-mix
 .nav-link a{display:inline-block;white-space:nowrap;font-size:var(--text-sm);font-weight:600;color:var(--ink-2);padding:8px 16px;border-radius:var(--radius-pill);transition:color var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out)}
 .nav-link a:hover{color:var(--ink);background:var(--glass-strong)}
 .nav-link.active a{color:var(--ink);background:var(--glass-strong);box-shadow:inset 0 0 0 1px var(--glass-border)}
-.theme-toggle-btn,.nav-toggle{width:40px;height:40px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--glass-strong);border:1px solid var(--glass-border);color:var(--ink);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:transform var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out)}
+.theme-toggle-btn,.nav-toggle{width:44px;height:44px;flex-shrink:0;border-radius:var(--radius-pill);background:var(--glass-strong);border:1px solid var(--glass-border);color:var(--ink);font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out)}
+.theme-toggle-btn svg,.nav-toggle svg{display:block}
 .theme-toggle-btn:hover,.nav-toggle:hover{transform:translateY(-2px);border-color:var(--glass-border-hover)}
 .theme-toggle-btn:active,.nav-toggle:active{transform:translateY(0)}
 .nav-toggle{display:none}
@@ -611,8 +612,8 @@ a.contact-info-val:hover{color:var(--accent-2)}
 @keyframes modal-pop{from{transform:translateY(16px) scale(0.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 .preview-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md)}
 .preview-modal-header h3{font-size:1.3rem;font-weight:700}
-.preview-modal-close{width:40px;height:40px;border-radius:50%;font-size:1.5rem;line-height:1;color:var(--ink-2);display:flex;align-items:center;justify-content:center;background:var(--glass);border:1px solid var(--glass-border);transition:color var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out)}
-.preview-modal-close:hover{color:var(--ink);border-color:var(--glass-border-hover)}
+.preview-modal-close{width:44px;height:44px;border-radius:50%;color:var(--ink-2);display:flex;align-items:center;justify-content:center;background:var(--glass);border:1px solid var(--glass-border);cursor:pointer;transition:color var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+.preview-modal-close:hover{color:var(--ink);border-color:var(--glass-border-hover);transform:scale(1.05)}
 .preview-modal-body{display:flex;flex-direction:column;gap:var(--space-md)}
 .preview-modal-hero{display:flex;align-items:center;gap:var(--space-md);padding:var(--space-md);border-radius:var(--radius-input);background:var(--glass);border:1px solid var(--glass-border)}
 .preview-modal-hero-logo{width:60px;height:60px;flex-shrink:0;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:var(--glass-strong);border:1px solid var(--glass-border)}
@@ -627,10 +628,11 @@ a.contact-info-val:hover{color:var(--accent-2)}
 
 /* ============ Chat bubble ============ */
 .chat-bubble-wrapper{position:fixed;bottom:var(--space-lg);right:var(--space-lg);z-index:800}
-.chat-bubble-trigger{width:56px;height:56px;border-radius:50%;background:var(--accent);box-shadow:0 10px 32px color-mix(in oklab,var(--accent) 40%,transparent);display:flex;align-items:center;justify-content:center;position:relative;transition:transform var(--dur-1) var(--ease-out)}
+.chat-bubble-trigger{width:56px;height:56px;border-radius:50%;background:var(--accent);box-shadow:0 10px 32px color-mix(in oklab,var(--accent) 40%,transparent);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:transform var(--dur-1) var(--ease-out)}
 .chat-bubble-trigger:hover{transform:translateY(-3px) scale(1.04)}
 .chat-bubble-trigger:active{transform:scale(0.97)}
-.chat-bubble-icon{font-size:1.3rem;z-index:1;filter:grayscale(1) brightness(0.2)}
+.chat-bubble-icon{display:flex;align-items:center;justify-content:center;color:var(--accent-ink);z-index:1}
+.chat-bubble-icon svg{display:block}
 .chat-bubble-pulse{position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--accent-2);animation:ring-pulse 2.2s var(--ease-out) infinite}
 @keyframes ring-pulse{0%{transform:scale(1);opacity:0.55}100%{transform:scale(1.35);opacity:0}}
 .chat-box-container{position:absolute;bottom:72px;right:0;width:344px;background:var(--glass-strong);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid var(--glass-border-hover);border-radius:24px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px var(--shadow-deep),inset 0 1px 0 var(--glass-highlight);transform-origin:bottom right}
@@ -639,7 +641,7 @@ a.contact-info-val:hover{color:var(--accent-2)}
 .chat-header-info{display:flex;align-items:center;gap:10px}
 .chat-header-avatar{width:32px;height:32px;border-radius:50%;object-fit:contain;background:var(--glass-strong)}
 .chat-header-title{font-family:var(--font-display);font-size:0.9rem;font-weight:700;color:var(--ink)}
-.chat-close-btn{width:32px;height:32px;border-radius:50%;color:var(--ink-2);font-size:1.2rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:color var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out)}
+.chat-close-btn{width:36px;height:36px;border-radius:50%;color:var(--ink-2);display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;transition:color var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out)}
 .chat-close-btn:hover{color:var(--ink);background:var(--glass-strong)}
 .chat-body{flex:1;max-height:300px;overflow-y:auto;padding:var(--space-sm);display:flex;flex-direction:column;gap:var(--space-2xs);scrollbar-width:thin;scrollbar-color:var(--glass-border) transparent}
 .chat-msg{padding:8px 16px;border-radius:16px;font-size:0.85rem;line-height:1.55;max-width:88%}
@@ -657,7 +659,7 @@ a.contact-info-val:hover{color:var(--accent-2)}
 .chat-input{flex:1;min-width:0;background:var(--glass-strong);border:1px solid var(--glass-border);border-radius:var(--radius-pill);padding:9px 16px;font-size:0.85rem;color:var(--ink);font-family:var(--font-body);outline:none}
 .chat-input:focus{border-color:color-mix(in oklab,var(--accent-2) 55%,transparent)}
 .chat-input::placeholder{color:var(--ink-3)}
-.chat-send-btn{width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out)}
+.chat-send-btn{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;cursor:pointer;border:none;transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out)}
 .chat-send-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px color-mix(in oklab,var(--accent) 35%,transparent)}
 
 /* ============ Footer ============ */

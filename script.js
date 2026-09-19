@@ -90,12 +90,14 @@ function initTheme() {
   });
 
   function updateToggleIcons(theme) {
+    const sunSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
     themeToggleBtns.forEach(btn => {
       if (theme === 'light') {
-        btn.innerHTML = '&#9790;'; // Moon
+        btn.innerHTML = moonSvg;
         btn.setAttribute('aria-label', 'Switch to Dark Mode');
       } else {
-        btn.innerHTML = '&#9788;'; // Sun
+        btn.innerHTML = sunSvg;
         btn.setAttribute('aria-label', 'Switch to Light Mode');
       }
     });
@@ -317,16 +319,21 @@ function initMobileMenu() {
   const navLinks = document.getElementById('nav-links');
   if (!toggleBtn || !navLinks) return;
 
+  const hamburgerSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>`;
+  const closeSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+  toggleBtn.innerHTML = hamburgerSvg;
+
   const closeMenu = () => {
     navLinks.classList.remove('open');
-    toggleBtn.innerHTML = '&#9776;';
+    toggleBtn.innerHTML = hamburgerSvg;
     toggleBtn.setAttribute('aria-expanded', 'false');
   };
 
   toggleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     const isOpen = navLinks.classList.toggle('open');
-    toggleBtn.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+    toggleBtn.innerHTML = isOpen ? closeSvg : hamburgerSvg;
     toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 
@@ -359,17 +366,18 @@ function initUpiCopy() {
       const upiId = btn.getAttribute('data-upi') || 'akshanshsinha67@axl';
       try {
         await navigator.clipboard.writeText(upiId);
-        showToast(`UPI ID copied: ${upiId}`, '📋');
+        showToast(`UPI ID copied: ${upiId}`, 'copy');
         const statusSpan = btn.querySelector('.copy-status');
-        const originalText = statusSpan ? statusSpan.textContent : '';
-        if (statusSpan) statusSpan.textContent = '✓ Copied!';
+        const originalHtml = statusSpan ? statusSpan.innerHTML : '';
+        if (statusSpan) {
+          statusSpan.innerHTML = '<span style="color:var(--accent-2)">✓ Copied!</span>';
+        }
         btn.style.color = 'var(--accent-2)';
         setTimeout(() => {
-          if (statusSpan) statusSpan.textContent = originalText || '📋';
+          if (statusSpan) statusSpan.innerHTML = originalHtml;
           btn.style.color = '';
         }, 2000);
       } catch (err) {
-        // Fallback for older browsers
         const textarea = document.createElement('textarea');
         textarea.value = upiId;
         textarea.style.position = 'fixed';
@@ -378,7 +386,7 @@ function initUpiCopy() {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        showToast(`UPI ID copied: ${upiId}`, '📋');
+        showToast(`UPI ID copied: ${upiId}`, 'copy');
       }
     });
   });
@@ -388,7 +396,7 @@ function initUpiCopy() {
    6c. Floating Glass Toast System
    ========================================================================== */
 let toastTimeout = null;
-function showToast(message, icon = '✓') {
+function showToast(message, icon = 'check') {
   let toast = document.getElementById('global-toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -397,7 +405,14 @@ function showToast(message, icon = '✓') {
     document.body.appendChild(toast);
   }
   
-  toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+  let iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+  if (icon === 'copy' || icon === '📋') {
+    iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+  } else if (icon === 'error' || icon === '✕') {
+    iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+  }
+  
+  toast.innerHTML = `<span class="toast-icon">${iconSvg}</span><span>${message}</span>`;
   toast.classList.add('active');
   
   if (toastTimeout) clearTimeout(toastTimeout);

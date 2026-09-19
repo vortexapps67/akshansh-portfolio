@@ -108,10 +108,10 @@
           <a href="https://beatwave.oneapp.dev" target="_blank" rel="noopener" class="project-btn-link">Launch site</a>
           <div class="beatwave-download-container">
             <div class="beatwave-download-btn-group">
-              <a href="https://github.com/beatlabs790/BeatWave/releases/download/v4.0/BeatWave-release-v4.apk" download class="btn-download-action">&#9094; Get APK</a>
+              <a href="https://github.com/beatlabs790/BeatWave/releases/download/v4.0/BeatWave-release-v4.apk" download class="btn-download-action" aria-label="Download BeatWave APK"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Get APK</a>
             </div>
             <div class="live-download-ticker large-counter">
-              <span class="live-download-pulse"></span>
+              <span class="live-download-pulse" aria-hidden="true"></span>
               <span class="live-download-val">4,000+</span> downloads
             </div>
           </div>
@@ -241,9 +241,9 @@
   </main>
 
   <div class="chat-bubble-wrapper">
-    <button class="chat-bubble-trigger" id="chat-bubble-trigger">
-      <div class="chat-bubble-pulse"></div>
-      <span class="chat-bubble-icon">&#128172;</span>
+    <button class="chat-bubble-trigger" id="chat-bubble-trigger" aria-label="Ask Me Anything">
+      <div class="chat-bubble-pulse" aria-hidden="true"></div>
+      <span class="chat-bubble-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
     </button>
     <div class="chat-box-container" id="chat-box-container">
       <div class="chat-header">
@@ -251,7 +251,7 @@
           <img src="assets/logo.png" alt="Akshansh" class="chat-header-avatar">
           <span class="chat-header-title">Ask Me Anything</span>
         </div>
-        <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+        <button class="chat-close-btn" id="chat-close-btn" aria-label="Close Chat"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
       <div class="chat-body" id="chat-body">
         <div class="chat-msg-typing" id="chat-msg-typing">
@@ -259,8 +259,8 @@
         </div>
       </div>
       <div class="chat-footer">
-        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
-        <button class="chat-send-btn" id="chat-send-btn">&#10148;</button>
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." aria-label="Chat input">
+        <button class="chat-send-btn" id="chat-send-btn" aria-label="Send Message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
       </div>
     </div>
   </div>
