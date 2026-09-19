@@ -126,7 +126,7 @@ function initPreloader() {
         preloader.style.display = 'none';
         document.body.classList.add('loaded');
         window.dispatchEvent(new Event('scroll'));
-      }, 750);
+      }, 1300);
     }
   }
 }
